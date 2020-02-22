@@ -3,9 +3,10 @@ version: '3'
 services:
   nodemongodocker:
     image: nodemongodocker
-    build: ./api
+    build: .
     volumes:
       - ./api:/usr/src/app
+      - ./client:/usr/src/app/client
       - /usr/app/node_modules
     environment:
       NODE_ENV: production
