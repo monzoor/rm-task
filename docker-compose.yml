@@ -4,6 +4,7 @@ services:
   nodemongodocker:
     image: nodemongodocker
     build: .
+    restart: always
     volumes:
       - ./api:/usr/src/app
       - ./client:/usr/src/app/client
