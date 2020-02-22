@@ -1,0 +1,23 @@
+Dev ops task
+
+Docker setup for node and react ----> 3h
+Setup NGNIX
+
+
+Node Task
+
+Create node initial project setup --> 2h
+Read api --> 1h
+create api --> 1h
+update api --> 1h
+create api documentation --> 2h
+
+
+React
+initial react setup --> 1h
+home page design --> 2h
+details page design --> 2h
+search page design --> 2h
+connection with api for home page + test code --> 3h
+connection with api for details page + test code --> 3h
+connection with api for search page + test code --> 3h

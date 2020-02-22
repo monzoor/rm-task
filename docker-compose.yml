@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  nodemongodocker:
+    image: nodemongodocker
+    build: ./api
+    volumes:
+      - ./api:/usr/src/app
+      - /usr/app/node_modules
+    environment:
+      NODE_ENV: production
+    ports:
+      - 8080:8080
+    command: npm run dev
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./data:/data/db/docker-node-mongo
+    ports:
+      - "27017:27017"
