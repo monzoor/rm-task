@@ -9,7 +9,7 @@ const PORT = 8080;
 
 const connectDb = require('./config/db.config');
 const routers = require('./routers/allRouter');
-const { handleError } = require('./utils/errorHandle')
+const { handleError } = require('./utils/errorHandle');
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.use(compression());
 
 app.use('/api', routers);
 app.use((err, req, res, next) => {
-  handleError(err, res);
+    handleError(err, res);
 });
 
 // All remaining requests return the React app, so it can handle routing.
@@ -29,8 +29,8 @@ app.get('*', function(request, response) {
 });
 
 app.listen(PORT, function() {
-  console.log(`Listening on ${PORT}`);
-  connectDb().then(() => {
-    console.log('MongoDb connected');
-  });
+    console.log(`Listening on ${PORT}`);
+    connectDb().then(() => {
+        console.log('MongoDb connected');
+    });
 });
