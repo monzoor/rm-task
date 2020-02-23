@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row } from 'reactstrap';
+import { Container } from 'reactstrap';
 
 import { FadeInAnimation } from '../../Utils/DesignUtils';
 import Header from '../Common/Header';
@@ -7,12 +7,14 @@ const PublicLayout = ({ children }) => {
     console.log('---ssd');
 
     return (
-        <Container fluid>
-            <Row>
+        <>
+            <Container fluid>
                 <Header />
-                <FadeInAnimation>{children}</FadeInAnimation>
-            </Row>
-        </Container>
+            </Container>
+            <FadeInAnimation>
+                <Container>{children}</Container>
+            </FadeInAnimation>
+        </>
     );
 };
 

@@ -1,19 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
+    Container,
     Row,
     Col,
-    Collapse,
     Navbar,
-    NavbarToggler,
-    NavbarBrand,
     Nav,
     NavItem,
     NavLink,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-    NavbarText,
     FormGroup,
 } from 'reactstrap';
 import {
@@ -28,7 +21,7 @@ const HeaderSearchBox = () => {
         <Nav className="mr-auto">
             <NavItem>
                 <ValidationForm>
-                    <Row className="header_search">
+                    <Row className="search--header">
                         <Col xs="3" className="pr-0">
                             <FormGroup className="location shadow-sm">
                                 <TextInputGroup
@@ -154,15 +147,116 @@ const SecendaryStaticNav = () => {
         </Nav>
     );
 };
+const Search = () => {
+    return (
+        <Row className="bg-primary mb-5">
+            <Col xs="12">
+                <h2 className="text-white mb-0 font-weight-light">Resorts</h2>
+                <p className="text-white font-weight-light small">
+                    Treat yourself!! Your dream resort stay is just a few clicks
+                    away.
+                </p>
+            </Col>
+
+            <Col xs="12">
+                <ValidationForm>
+                    <Row className="search--main mb-3">
+                        <Col xs="5" className="px-0 ml-1 border property">
+                            <FormGroup>
+                                <TextInputGroup
+                                    // className="border-right-0"
+                                    name="name"
+                                    // value={formDatas.name}
+                                    id="userName"
+                                    minLength="4"
+                                    required
+                                    prepend={
+                                        <span className="input-group-text border-0">
+                                            <Icon
+                                                color="#444"
+                                                size={15}
+                                                icon="bed"
+                                            />
+                                        </span>
+                                    }
+                                    placeholder="Anywhere"
+                                    // onChange={handleChange}
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col className="px-0 border">
+                            <FormGroup className="location">
+                                <TextInputGroup
+                                    // className="border-right-0"
+                                    name="name"
+                                    // value={formDatas.name}
+                                    id="userName"
+                                    minLength="4"
+                                    required
+                                    prepend={
+                                        <span className="input-group-text border-0">
+                                            <Icon
+                                                color="#444"
+                                                size={15}
+                                                icon="calendar"
+                                            />
+                                        </span>
+                                    }
+                                    placeholder="Anywhere"
+                                    // onChange={handleChange}
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col className="px-0 border person">
+                            <FormGroup>
+                                <TextInputGroup
+                                    // className="border-right-0"
+                                    name="name"
+                                    // value={formDatas.name}
+                                    id="userName"
+                                    minLength="4"
+                                    required
+                                    prepend={
+                                        <span className="input-group-text border-0">
+                                            <Icon
+                                                color="#444"
+                                                size={15}
+                                                icon="users"
+                                            />
+                                        </span>
+                                    }
+                                    placeholder="Anywhere"
+                                    // onChange={handleChange}
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col xs="auto" className="px-0 mr-1">
+                            <button className="btn text-white border">
+                                Search
+                            </button>
+                        </Col>
+                    </Row>
+                </ValidationForm>
+            </Col>
+        </Row>
+    );
+};
 const Header = () => {
     return (
-        <Col xs="12" className="px-0 small mb-5">
-            <Navbar color="white" light expand="md">
-                <HeaderSearchBox />
-                <StaticNav />
-            </Navbar>
-            <SecendaryStaticNav />
-        </Col>
+        <Row>
+            <Col xs="12" className="px-0 small mb-5">
+                <Navbar color="white" light expand="md">
+                    <HeaderSearchBox />
+                    <StaticNav />
+                </Navbar>
+                <SecendaryStaticNav />
+            </Col>
+            <Col xs="12">
+                <Container>
+                    <Search />
+                </Container>
+            </Col>
+        </Row>
     );
 };
 
