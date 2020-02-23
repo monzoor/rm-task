@@ -1,19 +1,18 @@
 import React from 'react';
-import { Row, Col } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 
 import { FadeInAnimation } from '../../Utils/DesignUtils';
-
+import Header from '../Common/Header';
 const PublicLayout = ({ children }) => {
     console.log('---ssd');
 
     return (
-        <div className="container-fluid">
+        <Container fluid>
             <Row>
-                <Col>
-                    <FadeInAnimation>{children}</FadeInAnimation>
-                </Col>
+                <Header />
+                <FadeInAnimation>{children}</FadeInAnimation>
             </Row>
-        </div>
+        </Container>
     );
 };
 

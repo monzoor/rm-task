@@ -1,0 +1,30 @@
+.header_search {
+    .form-group {
+        margin-bottom: 0;
+    }
+    .form-control {
+        height: 30px;
+        font-size: 12px;
+        @extend .border-left-0;
+    }
+    .location {
+        .form-control {
+            @extend .border-right-0;
+        }
+    }
+    .date {
+        .form-control {
+            @extend .border-right-0;
+        }
+    }
+}
+.nav {
+    &--secendary {
+        a {
+            &.active {
+                color: #00a799;
+                border-bottom: 1px solid #00a799;
+            }
+        }
+    }
+}
