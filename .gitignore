@@ -102,3 +102,12 @@ dist
 
 # TernJS port file
 .tern-port
+
+# testing
+/coverage
+
+# production
+/client/build
+yarn.lock
+/api/package-lock.json
+.vscode

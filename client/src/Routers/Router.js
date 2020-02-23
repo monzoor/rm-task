@@ -1,0 +1,71 @@
+import React from 'react';
+import { Router, Route, Switch } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
+import history from '../Utils/history';
+import routes from './RouterConfig';
+
+const Spinner = () => {
+    return <p>loading..</p>;
+};
+
+const AppRoute = ({ component: Component, layout: Layout, ...rest }) => {
+    const status = Object.values({ ...rest.location.state })[0];
+
+    if (status === 404) {
+        return (
+            <Route
+                {...rest}
+                render={props => (
+                    <Layout>
+                        <Component {...props} />
+                    </Layout>
+                )}
+            />
+        );
+    }
+    return (
+        <Route
+            {...rest}
+            render={props => (
+                <React.Suspense fallback={<Spinner />}>
+                    <Layout>
+                        <Component {...props} />
+                    </Layout>
+                </React.Suspense>
+            )}
+        />
+    );
+};
+AppRoute.propTypes = {
+    component: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.func,
+        PropTypes.object,
+    ]).isRequired,
+    layout: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.func,
+        PropTypes.object,
+    ]).isRequired,
+};
+const Switches = () => (
+    <Router history={history}>
+        <div>
+            <Switch>
+                {routes.map((route, i) => (
+                    <AppRoute
+                        key={i}
+                        path={route.path}
+                        exact={route.exact}
+                        component={route.component}
+                        layout={route.layout}
+                        status={route.layout || null}
+                    />
+                ))}
+            </Switch>
+        </div>
+    </Router>
+);
+
+export default Switches;
