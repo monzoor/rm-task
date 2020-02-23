@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Row, Col, Media } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import Icon from '../../Utils/IconUtils';
 import { FeaturePropertiesLoader } from '../../Utils/Loader';
@@ -43,51 +44,59 @@ const FeatureItems = ({ properties }) => {
             {properties.map(property => {
                 return (
                     <Col xs="4" className="mb-4" key={property._id}>
-                        <img
-                            src={property.image[0]}
-                            className="img-fluid border-rounded"
-                            alt=""
-                        />
-                        {property.comments.map(comment => {
-                            const ratings = [];
-                            for (let i = 1; i <= comment.rating; i++) {
-                                ratings.push(
-                                    <Icon
-                                        className="mr-2"
-                                        color="#03848a"
-                                        size={15}
-                                        icon="star"
-                                    />
+                        <Link to={`/details/${property._id}`}>
+                            <img
+                                src={property.image[0]}
+                                className="img-fluid border-rounded"
+                                alt=""
+                            />
+                            {property.comments.map(comment => {
+                                const ratings = [];
+                                for (let i = 1; i <= comment.rating; i++) {
+                                    ratings.push(
+                                        <Icon
+                                            key={i}
+                                            className="mr-2"
+                                            color="#03848a"
+                                            size={15}
+                                            icon="star"
+                                        />
+                                    );
+                                }
+                                return (
+                                    <React.Fragment key={comment._id}>
+                                        <div className="rating my-2">
+                                            {ratings}
+                                        </div>
+                                        <p className="descriptions small">
+                                            {comment.comments}
+                                        </p>
+                                        <Media>
+                                            <Media left href="#">
+                                                <img
+                                                    src={comment.avatar}
+                                                    className="rounded-circle"
+                                                    alt=""
+                                                    width="50px"
+                                                    height="50px"
+                                                />
+                                            </Media>
+                                            <Media
+                                                body
+                                                className="ml-2 text-muted"
+                                            >
+                                                <p className="mb-0">
+                                                    {comment.userName}
+                                                </p>
+                                                <p className="small">
+                                                    {comment.location.country}
+                                                </p>
+                                            </Media>
+                                        </Media>
+                                    </React.Fragment>
                                 );
-                            }
-                            return (
-                                <>
-                                    <div className="rating my-2">{ratings}</div>
-                                    <p className="descriptions small">
-                                        {comment.comments}
-                                    </p>
-                                    <Media>
-                                        <Media left href="#">
-                                            <img
-                                                src={comment.avatar}
-                                                className="rounded-circle"
-                                                alt=""
-                                                width="50px"
-                                                height="50px"
-                                            />
-                                        </Media>
-                                        <Media body className="ml-2 text-muted">
-                                            <p className="mb-0">
-                                                {comment.userName}
-                                            </p>
-                                            <p className="small">
-                                                {comment.location.country}
-                                            </p>
-                                        </Media>
-                                    </Media>
-                                </>
-                            );
-                        })}
+                            })}
+                        </Link>
                     </Col>
                 );
             })}

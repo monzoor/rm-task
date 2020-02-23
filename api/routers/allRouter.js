@@ -1,10 +1,15 @@
 const express = require('express');
 const Router = express.Router();
+const { ErrorHandler } = require('../utils/errorHandle');
 
 const PerpertyController = require('../controller/Property.controller');
 
-Router.get('/allProperties', PerpertyController.allProperties);
+Router.get('/allProperties/:itemType?', PerpertyController.allProperties);
 Router.post('/createProperty', PerpertyController.createProperties);
 Router.get('/deleteAll', PerpertyController.deleteAll);
+Router.get('/*', (res, req, next) => {
+    throw new ErrorHandler(404, 'Invalid URL');
+    next();
+});
 
 module.exports = Router;

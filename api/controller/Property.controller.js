@@ -14,8 +14,16 @@ exports.deleteAll = async (req, res, next) => {
     }
 };
 exports.allProperties = async (req, res, next) => {
+    // comments: { $exists: true, $ne: null },
     try {
-        const allpropertiesData = await PropertyModel.find();
+        let allpropertiesData = {};
+        if (req.params.itemType === 'priority') {
+            allpropertiesData = await PropertyModel.find({
+                comments: { $gt: [] },
+            });
+        } else {
+            allpropertiesData = await PropertyModel.find();
+        }
         if (Object.keys(allpropertiesData).length === 0) {
             throw new ErrorHandler(404, 'No Data Found');
             next();
