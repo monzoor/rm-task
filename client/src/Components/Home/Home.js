@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Row, Col, Media } from 'reactstrap';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Icon from '../../Utils/IconUtils';
+import { FeaturePropertiesLoader } from '../../Utils/Loader';
+import NotFound from '../../Utils/NoContentFound.js';
+import useError from '../../CustomHook/ErrorHook';
+// Actions
+import featurePropertiesAction from './_Actions/featurePropertiesAction';
 
-const demoImg =
-    'https://cdn.vox-cdn.com/thumbor/CTluvlc9kScZlylzsRR4QRCE4Gg=/6x0:641x423/1200x800/filters:focal(6x0:641x423)/cdn.vox-cdn.com/uploads/chorus_image/image/48767301/Screen_Shot_2016-02-09_at_9.08.28_AM.0.0.png';
-const demoAvatar =
-    'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png';
+const FeaturePropertiesLoaders = () => (
+    <Row>
+        <Col xs="4">
+            <FeaturePropertiesLoader />
+        </Col>
+        <Col xs="4">
+            <FeaturePropertiesLoader />
+        </Col>
+        <Col xs="4">
+            <FeaturePropertiesLoader />
+        </Col>
+    </Row>
+);
 
 const StaticHeader = () => {
     return (
@@ -22,80 +37,105 @@ const StaticHeader = () => {
     );
 };
 
-const FeatureItems = () => {
+const FeatureItems = ({ properties }) => {
     return (
         <Row>
-            <Col xs="4">
-                <img
-                    src={demoImg}
-                    className="img-fluid border-rounded"
-                    alt=""
-                />
-                <div className="rating my-2">
-                    <Icon
-                        className="mr-2"
-                        color="#03848a"
-                        size={15}
-                        icon="star"
-                    />
-                    <Icon
-                        className="mr-2"
-                        color="#03848a"
-                        size={15}
-                        icon="star"
-                    />
-                    <Icon
-                        className="mr-2"
-                        color="#03848a"
-                        size={15}
-                        icon="star"
-                    />
-                    <Icon
-                        className="mr-2"
-                        color="#03848a"
-                        size={15}
-                        icon="star"
-                    />
-                    <Icon
-                        className="mr-2"
-                        color="#03848a"
-                        size={15}
-                        icon="star"
-                    />
-                </div>
-                <p className="descriptions small">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Iste perspiciatis quam consequatur rem beatae qui quo atque
-                    possimus harum expedita.
-                </p>
-                <Media>
-                    <Media left href="#">
+            {properties.map(property => {
+                return (
+                    <Col xs="4" className="mb-4" key={property._id}>
                         <img
-                            src={demoAvatar}
-                            className="rounded-circle"
+                            src={property.image[0]}
+                            className="img-fluid border-rounded"
                             alt=""
-                            width="50px"
-                            height="50px"
                         />
-                    </Media>
-                    <Media body className="ml-2 text-muted">
-                        <p className="mb-0">Nicky</p>
-                        <p className="small">China</p>
-                    </Media>
-                </Media>
-            </Col>
+                        {property.comments.map(comment => {
+                            const ratings = [];
+                            for (let i = 1; i <= comment.rating; i++) {
+                                ratings.push(
+                                    <Icon
+                                        className="mr-2"
+                                        color="#03848a"
+                                        size={15}
+                                        icon="star"
+                                    />
+                                );
+                            }
+                            return (
+                                <>
+                                    <div className="rating my-2">{ratings}</div>
+                                    <p className="descriptions small">
+                                        {comment.comments}
+                                    </p>
+                                    <Media>
+                                        <Media left href="#">
+                                            <img
+                                                src={comment.avatar}
+                                                className="rounded-circle"
+                                                alt=""
+                                                width="50px"
+                                                height="50px"
+                                            />
+                                        </Media>
+                                        <Media body className="ml-2 text-muted">
+                                            <p className="mb-0">
+                                                {comment.userName}
+                                            </p>
+                                            <p className="small">
+                                                {comment.location.country}
+                                            </p>
+                                        </Media>
+                                    </Media>
+                                </>
+                            );
+                        })}
+                    </Col>
+                );
+            })}
         </Row>
     );
 };
 const Home = () => {
-    console.log('--home');
+    const dispatch = useDispatch();
+    const [loadingItem, setLoadingItem] = useState(true);
+    const [notFound, setNotFound] = useState(false);
+    const { properties, loading } = useSelector(
+        state => state.featurePropertiesLists
+    );
+    const hasFeaturePropertiesError = useError({
+        from: 'featurePropertiesLists',
+    });
+    const fetchingProperties = useCallback(() => {
+        if (loadingItem) {
+            dispatch(featurePropertiesAction());
+        }
+    }, [dispatch, loadingItem]);
+
+    useEffect(() => {
+        fetchingProperties();
+    }, [fetchingProperties]);
+
+    useEffect(() => {
+        if (!loading) {
+            setLoadingItem(false);
+        }
+    }, [loading]);
+
+    useEffect(() => {
+        if (hasFeaturePropertiesError) setNotFound(true);
+    }, [hasFeaturePropertiesError]);
 
     return (
         <>
             <StaticHeader />
-            <FeatureItems />
+            {loadingItem ? (
+                <FeaturePropertiesLoaders />
+            ) : notFound ? (
+                <NotFound />
+            ) : (
+                <FeatureItemsMemoContainer properties={properties} />
+            )}
         </>
     );
 };
-
+const FeatureItemsMemoContainer = React.memo(FeatureItems);
 export default Home;

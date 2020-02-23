@@ -16,11 +16,14 @@ import {
 
 import Icon from '../../Utils/IconUtils';
 
+const subTest = () => {
+    console.log('---');
+};
 const HeaderSearchBox = () => {
     return (
         <Nav className="mr-auto">
             <NavItem>
-                <ValidationForm>
+                <ValidationForm onSubmit={subTest}>
                     <Row className="search--header">
                         <Col xs="3" className="pr-0">
                             <FormGroup className="location shadow-sm">
@@ -159,7 +162,7 @@ const Search = () => {
             </Col>
 
             <Col xs="12">
-                <ValidationForm>
+                <ValidationForm onSubmit={subTest}>
                     <Row className="search--main mb-3">
                         <Col xs="5" className="px-0 ml-1 border property">
                             <FormGroup>

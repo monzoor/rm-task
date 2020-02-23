@@ -15,6 +15,10 @@ const propertySchema = new mongoose.Schema({
             avatar: String,
             rating: Number,
             comments: String,
+            location: {
+                country: String,
+                city: String,
+            },
         },
     ],
     image: [String],
