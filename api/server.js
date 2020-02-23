@@ -19,10 +19,6 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '20mb' }));
 app.use(compression());
 
 app.use('/api', routers);
-// app.use('/api/properties', async (req, res) => {
-//   const properties = await Property.find();
-//   res.json(properties);
-// });
 
 app.use('/api/user-create', async (req, res) => {
   const user = new User({ 
@@ -51,11 +47,6 @@ app.use('/api/user-create', async (req, res) => {
 
   res.send('User created \n');
 });
-
-// app.use((err, req, res, next) => {
-//   // log the error...
-//   res.sendStatus(err.httpStatusCode).json(err)
-// })
 
 app.use((err, req, res, next) => {
   handleError(err, res);
