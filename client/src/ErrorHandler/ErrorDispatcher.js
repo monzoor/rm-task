@@ -1,7 +1,7 @@
 const ErrorDispatch = ({ dispatch, type, from, ...response }) => {
     const errorInfos = {
         status: response.status || null,
-        messages: response.data.message || null,
+        messages: 'data' in response ? response.data.message : null,
         from,
     };
 

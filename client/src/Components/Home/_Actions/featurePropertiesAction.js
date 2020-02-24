@@ -19,7 +19,7 @@ const featuredPropertiesAction = () => {
                     ...errorResponse,
                     from: 'featurePropertiesLists',
                 };
-                if (errorResponse.status === 500) {
+                if (!errorResponse || errorResponse.status === 500) {
                     ErrorDispatch({
                         dispatch,
                         type: 'SERVER_ERROR',

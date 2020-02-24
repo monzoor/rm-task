@@ -2,7 +2,6 @@ import { lazy } from 'react';
 
 import PublicLayout from '../Components/Layouts/PublicLayout';
 import NotFound from '../Components/404';
-
 const Home = lazy(() => import('../Components/Home/Home'));
 
 export default [

@@ -1,10 +1,17 @@
 import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 
 import history from '../Utils/history';
 import routes from './RouterConfig';
 
+// For testing
+const LocationDisplay = withRouter(({ location }) => (
+    <div className="d-none" data-testid="location-display">
+        {location.pathname}
+    </div>
+));
 const Spinner = () => {
     return <p>loading..</p>;
 };
@@ -64,6 +71,7 @@ const Switches = () => (
                     />
                 ))}
             </Switch>
+            <LocationDisplay />
         </div>
     </Router>
 );
