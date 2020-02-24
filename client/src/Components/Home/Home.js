@@ -130,7 +130,10 @@ const Home = () => {
     }, [loading]);
 
     useEffect(() => {
-        if (hasFeaturePropertiesError) setNotFound(true);
+        if (hasFeaturePropertiesError) {
+            setLoadingItem(false);
+            setNotFound(true);
+        }
     }, [hasFeaturePropertiesError]);
 
     return (

@@ -6,7 +6,7 @@ RUN npm install --production --silent && mv node_modules ../
 COPY ./api .
 RUN ls
 COPY ./client ./client
-RUN cd ./client && npm i && npm run build
+RUN cd ./client && npm i eslint && npm i && npm run build
 EXPOSE 8080
 RUN npm i -g nodemon
 CMD npm start
