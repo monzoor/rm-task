@@ -72,15 +72,13 @@ const FeatureItems = ({ properties }) => {
                                             {comment.comments}
                                         </p>
                                         <Media>
-                                            <Media left href="#">
-                                                <img
-                                                    src={comment.avatar}
-                                                    className="rounded-circle"
-                                                    alt=""
-                                                    width="50px"
-                                                    height="50px"
-                                                />
-                                            </Media>
+                                            <img
+                                                src={comment.avatar}
+                                                className="rounded-circle"
+                                                alt=""
+                                                width="50px"
+                                                height="50px"
+                                            />
                                             <Media
                                                 body
                                                 className="ml-2 text-muted"

@@ -14,12 +14,20 @@ exports.deleteAll = async (req, res, next) => {
     }
 };
 exports.allProperties = async (req, res, next) => {
-    // comments: { $exists: true, $ne: null },
     try {
         let allpropertiesData = {};
         if (req.params.itemType === 'priority') {
             allpropertiesData = await PropertyModel.find({
                 comments: { $gt: [] },
+            });
+        } else if (req.params.id) {
+            allpropertiesData = await PropertyModel.findById(
+                req.params.id
+            ).catch(() => {
+                if (Object.keys(allpropertiesData).length === 0) {
+                    throw new ErrorHandler(404, 'No Data Found');
+                    next();
+                }
             });
         } else {
             allpropertiesData = await PropertyModel.find();
@@ -32,7 +40,7 @@ exports.allProperties = async (req, res, next) => {
             data: allpropertiesData,
         });
     } catch (e) {
-        console.error(e);
+        console.error('========', e);
         next(e);
     }
 };
