@@ -89,6 +89,7 @@ exports.createProperties = async (req, res, next) => {
                 res.status(200).json({
                     status: 'sucess',
                     statusCode: 200,
+                    message: 'Sucessfuly property created',
                 });
             })
             .catch(err => {

@@ -1,12 +1,77 @@
-import React from 'react';
-import { Container, Row, Col, FormGroup } from 'reactstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, FormGroup, Button } from 'reactstrap';
+import {
+    transitions,
+    positions,
+    Provider as AlertProvider,
+    useAlert,
+} from 'react-alert';
+import AlertTemplate from 'react-alert-template-basic';
 import {
     ValidationForm,
     TextInputGroup,
+    TextInput,
 } from 'react-bootstrap4-form-validation';
+import { post } from 'axios';
+import Dropzone from 'react-dropzone-uploader';
+import '../../../node_modules/react-dropzone-uploader/dist/styles.css';
 
+const MyUploader = () => {
+    // specify upload params and url for your files
+    const getUploadParams = ({ meta }) => {
+        console.log('----', meta);
+
+        return { url: 'https://httpbin.org/post' };
+    };
+
+    // called every time a file's `status` changes
+    const handleChangeStatus = ({ meta, file }, status) => {
+        // console.log(status, meta, file);
+    };
+
+    // receives array of files that are done uploading when submit button is clicked
+    const handleSubmit = (files, allFiles) => {
+        // console.log(files.map(f => f.meta));
+        allFiles.forEach(f => f.remove());
+    };
+
+    return (
+        <Dropzone
+            getUploadParams={getUploadParams}
+            onChangeStatus={handleChangeStatus}
+            onSubmit={handleSubmit}
+            accept="image/*,audio/*,video/*"
+        />
+    );
+};
 const CreateContent = () => {
-    const subTest = () => {};
+    const alertPopUp = useAlert();
+    const [loadingData, setLoadingData] = useState(false);
+    const [formDatas, setFromDatas] = useState({
+        title: '',
+        description: '',
+        price: '',
+        country: '',
+        City: '',
+    });
+
+    const handleChange = e => {
+        setLoadingData(false);
+        setFromDatas({
+            // ...formDatas,
+            [e.target.name]: e.target.value,
+        });
+    };
+    const subTest = async (e, formData) => {
+        e.preventDefault();
+        setLoadingData(true);
+        try {
+            const response = await post('/api/createProperty', formData);
+            alertPopUp.success(response.data.message);
+        } catch (error) {
+            setLoadingData(false);
+        }
+    };
     return (
         <Container className="my-5">
             <Row>
@@ -20,12 +85,13 @@ const CreateContent = () => {
                                 Title <sup className="text-danger small">*</sup>
                             </label>
                             <TextInputGroup
+                                minLength="4"
                                 id="title"
                                 name="title"
-                                // value={formDatas.name}
+                                value={formDatas.name}
                                 required
-                                placeholder="Anywhere"
-                                // onChange={handleChange}
+                                placeholder="Title"
+                                onChange={handleChange}
                             />
                         </FormGroup>
                         <FormGroup className="col-12">
@@ -33,13 +99,16 @@ const CreateContent = () => {
                                 Description{' '}
                                 <sup className="text-danger small">*</sup>
                             </label>
-                            <TextInputGroup
+                            <TextInput
                                 id="description"
                                 name="description"
-                                // value={formDatas.name}
+                                value={formDatas.name}
                                 required
+                                multiline
+                                minLength="4"
+                                rows="5"
                                 placeholder="Anywhere"
-                                // onChange={handleChange}
+                                onChange={handleChange}
                             />
                         </FormGroup>
                         <FormGroup className="col-4">
@@ -49,10 +118,11 @@ const CreateContent = () => {
                             <TextInputGroup
                                 id="price"
                                 name="price"
-                                // value={formDatas.name}
+                                value={formDatas.name}
                                 required
+                                minLength="1"
                                 placeholder="Anywhere"
-                                // onChange={handleChange}
+                                onChange={handleChange}
                             />
                         </FormGroup>
                         <FormGroup className="col-4">
@@ -63,10 +133,11 @@ const CreateContent = () => {
                             <TextInputGroup
                                 id="country"
                                 name="country"
-                                // value={formDatas.name}
+                                minLength="2"
+                                value={formDatas.name}
                                 required
                                 placeholder="Anywhere"
-                                // onChange={handleChange}
+                                onChange={handleChange}
                             />
                         </FormGroup>
                         <FormGroup className="col-4">
@@ -74,14 +145,24 @@ const CreateContent = () => {
                                 City <sup className="text-danger small">*</sup>
                             </label>
                             <TextInputGroup
+                                minLength="2"
                                 id="city"
                                 name="city"
-                                // value={formDatas.name}
+                                value={formDatas.name}
                                 required
                                 placeholder="Anywhere"
-                                // onChange={handleChange}
+                                onChange={handleChange}
                             />
                         </FormGroup>
+                        <Col xs="12">
+                            <Button
+                                disabled={loadingData}
+                                type="submit"
+                                color="primary"
+                            >
+                                Submit
+                            </Button>
+                        </Col>
                     </ValidationForm>
                 </Col>
             </Row>
@@ -89,4 +170,17 @@ const CreateContent = () => {
     );
 };
 
-export default CreateContent;
+const options = {
+    // you can also just use 'bottom center'
+    position: positions.TOP_CENTER,
+    timeout: 5000,
+    offset: '30px',
+    // you can also just use 'scale'
+    transition: transitions.SCALE,
+};
+const CreateContents = () => (
+    <AlertProvider template={AlertTemplate} {...options}>
+        <CreateContent />
+    </AlertProvider>
+);
+export default CreateContents;
