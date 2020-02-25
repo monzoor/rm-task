@@ -6,7 +6,7 @@ import { withRouter } from 'react-router';
 import history from '../Utils/history';
 import { Spinner } from '../Utils/Loader';
 import routes from './RouterConfig';
-
+import CreateContent from '../Components/Dashboard/CreateContent';
 // For testing
 const LocationDisplay = withRouter(({ location }) => (
     <div className="d-none" data-testid="location-display">
@@ -56,21 +56,20 @@ AppRoute.propTypes = {
 };
 const Switches = () => (
     <Router history={history}>
-        <div>
-            <Switch>
-                {routes.map((route, i) => (
-                    <AppRoute
-                        key={i}
-                        path={route.path}
-                        exact={route.exact}
-                        component={route.component}
-                        layout={route.layout}
-                        status={route.layout || null}
-                    />
-                ))}
-            </Switch>
-            <LocationDisplay />
-        </div>
+        <Switch>
+            <Route exact path="/create" component={CreateContent} />
+            {routes.map((route, i) => (
+                <AppRoute
+                    key={i}
+                    path={route.path}
+                    exact={route.exact}
+                    component={route.component}
+                    layout={route.layout}
+                    status={route.layout || null}
+                />
+            ))}
+        </Switch>
+        <LocationDisplay />
     </Router>
 );
 
