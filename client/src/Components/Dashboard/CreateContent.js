@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Container, Row, Col, FormGroup, Button } from 'reactstrap';
 import {
     transitions,
@@ -13,6 +13,7 @@ import {
     TextInput,
 } from 'react-bootstrap4-form-validation';
 import { post } from 'axios';
+import { useDropzone } from 'react-dropzone';
 
 const CreateContent = () => {
     const alertPopUp = useAlert();
@@ -42,6 +43,24 @@ const CreateContent = () => {
             setLoadingData(false);
         }
     };
+
+    const onDrop = useCallback(acceptedFiles => {
+        // Do something with the files
+        const data = new FormData();
+        for (let i = 0; i < acceptedFiles.length; i += 1) {
+            data.append('file', acceptedFiles[i]);
+        }
+        post('/img/upload', data)
+            .then(response => {
+                console.log('-----s', response);
+            })
+            .catch(error => {
+                console.log('====e====', error);
+            });
+    }, []);
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+    });
     return (
         <Container className="my-5">
             <Row>
@@ -124,6 +143,21 @@ const CreateContent = () => {
                                 onChange={handleChange}
                             />
                         </FormGroup>
+                        <div {...getRootProps()}>
+                            <input
+                                multiple
+                                name="productImage"
+                                {...getInputProps()}
+                            />
+                            {isDragActive ? (
+                                <p>Drop the files here ...</p>
+                            ) : (
+                                <p>
+                                    Drag 'n' drop some files here, or click to
+                                    select files
+                                </p>
+                            )}
+                        </div>
                         <Col xs="12">
                             <Button
                                 disabled={loadingData}

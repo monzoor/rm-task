@@ -24,16 +24,13 @@ app.use(
 );
 const storage = multer.diskStorage({
     destination(req, file, cb) {
-        console.log('----1---');
-        cb(null, './public/uploads/');
+        cb(null, 'public/uploads/');
     },
     filename(req, file, cb) {
-        console.log('----w---');
-        cb(null, `${new Date().getTime()}_${uniqid()}.jpg`);
+        cb(null, `${new Date().getTime()}_.jpg`);
     },
 });
 const fileFilter = (req, file, cb) => {
-    console.log('+++', file);
     // reject a file
     if (file.mimetype === 'image/jpeg') {
         cb(null, true);
@@ -47,11 +44,11 @@ const upload = multer({
         fileSize: 1024 * 1024 * 10, // 10MB
     },
     fileFilter,
-}).single('productImage');
-// }).array('productImage', 1000);
+    // }).single('productImage');
+    // }).array('productImage', 1000);
+}).any();
 
 app.post('/img/upload', (req, res) => {
-    console.log('======', req.body, req.files);
     // upload.array('productImage', 2)
     upload(req, res, err => {
         if (err) {
@@ -60,13 +57,14 @@ app.post('/img/upload', (req, res) => {
             res.status(status).json({ status, message });
         } else {
             const status = 200;
-            const uploadedData = req.body.map(data => ({
+            const uploadedData = req.files.map(data => ({
                 // uid: data.filename.replace('.jpg', ''),
                 name: data.originalname,
                 status: 200,
                 url: `/api/img/${data.filename}`,
             }));
-            res.status(status).json(uploadedData[0]);
+            console.log('---', uploadedData);
+            res.status(status).json(uploadedData);
         }
     });
 });
