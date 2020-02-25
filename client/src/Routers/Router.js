@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 
 import history from '../Utils/history';
+import { Spinner } from '../Utils/Loader';
 import routes from './RouterConfig';
 
 // For testing
@@ -12,9 +13,6 @@ const LocationDisplay = withRouter(({ location }) => (
         {location.pathname}
     </div>
 ));
-const Spinner = () => {
-    return <p>loading..</p>;
-};
 
 const AppRoute = ({ component: Component, layout: Layout, ...rest }) => {
     const status = Object.values({ ...rest.location.state })[0];

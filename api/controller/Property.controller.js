@@ -59,19 +59,25 @@ exports.createProperties = async (req, res, next) => {
             country: req.body.country,
             city: req.body.city,
         },
-        comments: [
-            {
-                userName: 'Wasiq',
-                avatar:
-                    'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
-                rating: 5,
-                comments: 'We hated your smelly shitty house',
-                location: {
-                    country: 'Bangladesh',
-                    city: 'Dhaka',
-                },
-            },
-        ],
+        comments: req.body.comments,
+        creator: {
+            name: 'Monzoor',
+            avatar:
+                'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
+        },
+        // comments: [
+        //     {
+        //         userName: 'Wasiq',
+        //         avatar:
+        //             'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
+        //         rating: 5,
+        //         comments: 'We hated your smelly shitty house',
+        //         location: {
+        //             country: 'Bangladesh',
+        //             city: 'Dhaka',
+        //         },
+        //     },
+        // ],
         image: [
             'https://cdn.vox-cdn.com/thumbor/CTluvlc9kScZlylzsRR4QRCE4Gg=/6x0:641x423/1200x800/filters:focal(6x0:641x423)/cdn.vox-cdn.com/uploads/chorus_image/image/48767301/Screen_Shot_2016-02-09_at_9.08.28_AM.0.0.png',
         ],

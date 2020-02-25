@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Icon from '../../Utils/IconUtils';
 
 import NotFound from '../../Utils/NoContentFound.js';
+import { Spinner } from '../../Utils/Loader';
 import useError from '../../CustomHook/ErrorHook';
 
 import propertyDetailsAction from './_Actions/propertyDetailsAction';
@@ -12,20 +13,29 @@ import propertyDetailsAction from './_Actions/propertyDetailsAction';
 const demoImage =
     'https://cdn.vox-cdn.com/thumbor/CTluvlc9kScZlylzsRR4QRCE4Gg=/6x0:641x423/1200x800/filters:focal(6x0:641x423)/cdn.vox-cdn.com/uploads/chorus_image/image/48767301/Screen_Shot_2016-02-09_at_9.08.28_AM.0.0.png';
 
-const PropertyHeader = () => {
+const PropertyHeader = ({ title, rating, location }) => {
+    const ratings = [];
+    for (let i = 1; i <= rating; i++) {
+        ratings.push(
+            <Icon
+                key={i}
+                className="mr-2"
+                color="#ffbb06"
+                size={20}
+                icon="star"
+            />
+        );
+    }
     return (
         <Row>
             <Col xs="auto" className="pr-0">
-                <h1 className="h4">Hotel Alborada Ocean Club</h1>
+                <h1 className="h4">{title}</h1>
             </Col>
-            <Col>
-                <Icon className="mr-2" color="#ffbb06" size={20} icon="star" />
-                <Icon className="mr-2" color="#ffbb06" size={20} icon="star" />
-                <Icon className="mr-2" color="#ffbb06" size={20} icon="star" />
-            </Col>
+
+            <Col>{ratings}</Col>
             <Col xs="12">
                 <p className="small">
-                    Costa del Silencio, Tenerife, Canary Island
+                    {`${location.city}, ${location.country}`}
                 </p>
             </Col>
             <Col xs="auto" className="pr-0">
@@ -80,25 +90,31 @@ const PropertyImages = () => {
         </Row>
     );
 };
-const PropertyDetailsItems = () => {
+const PropertyDetailsItems = ({
+    title,
+    description,
+    location,
+    type,
+    creator,
+}) => {
+    const { country, city } = location;
+    const { avatar, name } = creator;
     return (
         <>
             <Row>
                 <Col xs="10">
-                    <h2 className="h1 font-weight-bold">
-                        Stylish Spacious Double with views of the city!!
-                    </h2>
-                    <p>Geater London</p>
+                    <h2 className="h1 font-weight-bold">{title}</h2>
+                    <p>{`${city}, ${country}`}</p>
                 </Col>
                 <Col xs="2" className="text-center">
                     <img
-                        src="https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png"
+                        src={avatar}
                         className="rounded-circle"
                         alt=""
                         width="50px"
                         height="50px"
                     />
-                    <p className="text-muted small">Summy</p>
+                    <p className="text-muted small">{name}</p>
                 </Col>
             </Row>
             <Media className="mb-3">
@@ -106,7 +122,7 @@ const PropertyDetailsItems = () => {
                     <Icon className="mr-2" color="#000" size={12} icon="home" />
                 </Media>
                 <Media body>
-                    <p className="mb-0">Private room in flat</p>
+                    <p className="mb-0">{`${type} room in flat`}</p>
                     <span className="text-muted font-weight-light">
                         <span className="mr-3">2 guests</span>
                         <span className="mr-3">1 bedroom</span>
@@ -166,18 +182,7 @@ const PropertyDetailsItems = () => {
                 </Media>
             </Media>
             <hr className="my-4" />
-            <div className="font-weight-light">
-                <p>
-                    A spacious double room with a comfy king size bed in the
-                    heart of the Easr End
-                </p>
-                <p className="mb-0">- 5mins walk from underground</p>
-                <p className="mb-0">- 5mins walk to shadwel DLR station</p>
-                <p className="mb-0">- 10mins by train to city</p>
-                <p className="mb-0">
-                    - 5mins by train to trendy shoreditch nightlife
-                </p>
-            </div>
+            <div className="font-weight-light">{description}</div>
         </>
     );
 };
@@ -193,25 +198,42 @@ const Reserve = () => {
         </Row>
     );
 };
-const PropertyDetails = ({ match }) => {
-    const dispatch = useDispatch();
-    const { details, loading } = useSelector(state => state.propertyDetails);
-    console.log(details, loading);
-    const fetchingPropertyDetails = useCallback(() => {
-        dispatch(propertyDetailsAction(match.params.id));
-    }, [dispatch, match]);
 
-    useEffect(() => {
-        fetchingPropertyDetails();
-    }, [fetchingPropertyDetails]);
+const PropertyDetailsContainer = ({ details }) => {
+    const {
+        title,
+        image,
+        description,
+        location,
+        comments,
+        type,
+        creator,
+    } = details;
+
+    let rating = 0;
+    let ratings = comments.map(comment => {
+        rating = rating + comment.rating;
+        return rating;
+    });
+    ratings = parseInt(ratings / comments.length, 10);
 
     return (
         <>
-            <PropertyHeader />
-            <PropertyImages />
+            <PropertyHeader
+                title={title}
+                rating={ratings}
+                location={location}
+            />
+            <PropertyImages images={image} />
             <Row className="mt-5">
                 <Col xs="8">
-                    <PropertyDetailsItems />
+                    <PropertyDetailsItems
+                        title={title}
+                        description={description}
+                        location={location}
+                        type={type}
+                        creator={creator}
+                    />
                 </Col>
                 <Col xs="4">
                     <Reserve />
@@ -220,5 +242,47 @@ const PropertyDetails = ({ match }) => {
         </>
     );
 };
+const PropertyDetails = ({ match }) => {
+    const dispatch = useDispatch();
+    const [loadingItem, setLoadingItem] = useState(true);
+    const [notFound, setNotFound] = useState(false);
+    const { details, loading } = useSelector(state => state.propertyDetails);
+    const hasDetailsPropertyError = useError({
+        from: 'propertyDetails',
+    });
 
+    const fetchingPropertyDetails = useCallback(() => {
+        dispatch(propertyDetailsAction(match.params.id));
+    }, [dispatch, match]);
+
+    useEffect(() => {
+        fetchingPropertyDetails();
+    }, [fetchingPropertyDetails]);
+
+    useEffect(() => {
+        if (!loading) {
+            setLoadingItem(false);
+        }
+    }, [loading]);
+
+    useEffect(() => {
+        if (hasDetailsPropertyError) {
+            setLoadingItem(false);
+            setNotFound(true);
+        }
+    }, [hasDetailsPropertyError]);
+
+    return (
+        <div className="mh--50">
+            {loadingItem ? (
+                <Spinner />
+            ) : notFound ? (
+                <NotFound />
+            ) : (
+                <PropertyDetailsContainerMemo details={details} />
+            )}
+        </div>
+    );
+};
+const PropertyDetailsContainerMemo = React.memo(PropertyDetailsContainer);
 export default withRouter(PropertyDetails);

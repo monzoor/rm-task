@@ -5,6 +5,10 @@ const propertySchema = new mongoose.Schema({
     description: String,
     price: String,
     type: String,
+    creator: {
+        name: String,
+        avatar: String,
+    },
     location: {
         country: String,
         city: String,

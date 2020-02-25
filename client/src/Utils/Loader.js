@@ -1,5 +1,6 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
+import loadingImage from '../Assets/images/loader.gif';
 
 const FeaturePropertiesLoader = () => (
     <ContentLoader
@@ -20,4 +21,12 @@ const FeaturePropertiesLoader = () => (
     </ContentLoader>
 );
 
-export { FeaturePropertiesLoader };
+const Spinner = () => {
+    return (
+        <div className="img-loader-init">
+            <img src={loadingImage} alt="loading" />
+        </div>
+    );
+};
+
+export { FeaturePropertiesLoader, Spinner };
