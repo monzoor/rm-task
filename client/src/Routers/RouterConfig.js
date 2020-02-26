@@ -6,6 +6,7 @@ const Home = lazy(() => import('../Components/Home/Home'));
 const PropertyDetais = lazy(() =>
     import('../Components/PropertyDetails/PropertyDetails.js')
 );
+const Create = lazy(() => import('../Components/Dashboard/CreateContent.js'));
 export default [
     {
         path: '/',
@@ -18,6 +19,13 @@ export default [
         exact: true,
         component: PropertyDetais,
         layout: PublicLayout,
+    },
+    {
+        path: '/create',
+        exact: true,
+        component: Create,
+        layout: PublicLayout,
+        noHeader: true,
     },
     {
         path: '*',

@@ -6,7 +6,6 @@ import { withRouter } from 'react-router';
 import history from '../Utils/history';
 import { Spinner } from '../Utils/Loader';
 import routes from './RouterConfig';
-import CreateContent from '../Components/Dashboard/CreateContent';
 // For testing
 const LocationDisplay = withRouter(({ location }) => (
     <div className="d-none" data-testid="location-display">
@@ -16,6 +15,7 @@ const LocationDisplay = withRouter(({ location }) => (
 
 const AppRoute = ({ component: Component, layout: Layout, ...rest }) => {
     const status = Object.values({ ...rest.location.state })[0];
+    const { noHeader } = rest;
 
     if (status === 404) {
         return (
@@ -34,7 +34,7 @@ const AppRoute = ({ component: Component, layout: Layout, ...rest }) => {
             {...rest}
             render={props => (
                 <React.Suspense fallback={<Spinner />}>
-                    <Layout>
+                    <Layout noHeader={noHeader}>
                         <Component {...props} />
                     </Layout>
                 </React.Suspense>
@@ -57,7 +57,6 @@ AppRoute.propTypes = {
 const Switches = () => (
     <Router history={history}>
         <Switch>
-            <Route exact path="/create" component={CreateContent} />
             {routes.map((route, i) => (
                 <AppRoute
                     key={i}
@@ -66,6 +65,7 @@ const Switches = () => (
                     component={route.component}
                     layout={route.layout}
                     status={route.layout || null}
+                    noHeader={route.noHeader || null}
                 />
             ))}
         </Switch>

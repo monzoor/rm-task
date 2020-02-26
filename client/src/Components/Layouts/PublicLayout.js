@@ -3,12 +3,15 @@ import { Container } from 'reactstrap';
 
 import { FadeInAnimation } from '../../Utils/DesignUtils';
 import Header from '../Common/Header';
-const PublicLayout = ({ children }) => {
+const PublicLayout = ({ noHeader, children }) => {
     return (
         <>
-            <Container fluid>
-                <Header />
-            </Container>
+            {!noHeader && (
+                <Container fluid>
+                    <Header />
+                </Container>
+            )}
+
             <FadeInAnimation>
                 <Container>{children}</Container>
             </FadeInAnimation>
