@@ -10,9 +10,6 @@ import useError from '../../CustomHook/ErrorHook';
 
 import propertyDetailsAction from './_Actions/propertyDetailsAction';
 
-const demoImage =
-    'https://cdn.vox-cdn.com/thumbor/CTluvlc9kScZlylzsRR4QRCE4Gg=/6x0:641x423/1200x800/filters:focal(6x0:641x423)/cdn.vox-cdn.com/uploads/chorus_image/image/48767301/Screen_Shot_2016-02-09_at_9.08.28_AM.0.0.png';
-
 const PropertyHeader = ({ title, rating, location }) => {
     const ratings = [];
     for (let i = 1; i <= rating; i++) {
@@ -71,19 +68,19 @@ const PropertyHeader = ({ title, rating, location }) => {
         </Row>
     );
 };
-const PropertyImages = () => {
+const PropertyImages = ({ images }) => {
     return (
         <Row className="container--image">
             <Col xs="8" className="pr-0">
-                <img src={demoImage} className="img-fluid" alt="" />
+                <img src={images[0].url} className="img-fluid" alt="" />
             </Col>
             <Col xs="4">
                 <Row>
-                    <Col xs="12" className="pl-0">
-                        <img src={demoImage} className="img-fluid" alt="" />
+                    <Col xs="12" className="pl-0 text-center">
+                        <img height="250px" src={images[1].url} alt="" />
                     </Col>
-                    <Col xs="12" className="pl-0">
-                        <img src={demoImage} className="img-fluid" alt="" />
+                    <Col xs="12" className="pl-0 text-center">
+                        <img height="250px" src={images[2].url} alt="" />
                     </Col>
                 </Row>
             </Col>

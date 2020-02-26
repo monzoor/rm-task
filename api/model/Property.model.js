@@ -25,7 +25,11 @@ const propertySchema = new mongoose.Schema({
             },
         },
     ],
-    image: [String],
+    image: [
+        {
+            url: String,
+        },
+    ],
 });
 
 const Property = mongoose.model('Property', propertySchema);

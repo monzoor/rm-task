@@ -46,7 +46,7 @@ const FeatureItems = ({ properties }) => {
                     <Col xs="4" className="mb-4" key={property._id}>
                         <Link to={`/details/${property._id}`}>
                             <img
-                                src={property.image[0]}
+                                src={property.image[0].url}
                                 className="img-fluid border-rounded"
                                 alt=""
                             />

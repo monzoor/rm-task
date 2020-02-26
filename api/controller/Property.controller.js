@@ -1,5 +1,6 @@
 const PropertyModel = require('../model/Property.model');
 const { ErrorHandler } = require('../utils/errorHandle');
+const multer = require('multer');
 
 exports.deleteAll = async (req, res, next) => {
     try {
@@ -46,7 +47,7 @@ exports.allProperties = async (req, res, next) => {
 };
 
 exports.createProperties = async (req, res, next) => {
-    console.log('---', req.body);
+    console.log('-asdasd--', req.body);
     if (!req.body) {
         throw new ErrorHandler(400, 'Please fill all required field');
     }
@@ -65,21 +66,20 @@ exports.createProperties = async (req, res, next) => {
             avatar:
                 'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
         },
-        // comments: [
-        //     {
-        //         userName: 'Wasiq',
-        //         avatar:
-        //             'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
-        //         rating: 5,
-        //         comments: 'We hated your smelly shitty house',
-        //         location: {
-        //             country: 'Bangladesh',
-        //             city: 'Dhaka',
-        //         },
-        //     },
-        // ],
-        image: [
-            'https://cdn.vox-cdn.com/thumbor/CTluvlc9kScZlylzsRR4QRCE4Gg=/6x0:641x423/1200x800/filters:focal(6x0:641x423)/cdn.vox-cdn.com/uploads/chorus_image/image/48767301/Screen_Shot_2016-02-09_at_9.08.28_AM.0.0.png',
+        image: req.body.images,
+
+        comments: [
+            {
+                userName: 'Wasiq',
+                avatar:
+                    'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
+                rating: 5,
+                comments: 'We hated your smelly shitty house',
+                location: {
+                    country: 'Bangladesh',
+                    city: 'Dhaka',
+                },
+            },
         ],
     });
     try {
@@ -99,4 +99,50 @@ exports.createProperties = async (req, res, next) => {
         console.error(e);
         next(e);
     }
+};
+
+exports.imageUpload = (req, res, next) => {
+    const storage = multer.diskStorage({
+        destination(req, file, cb) {
+            cb(null, 'public/uploads/');
+        },
+        filename(req, file, cb) {
+            cb(null, `${new Date().getTime()}_.jpg`);
+        },
+    });
+    const fileFilter = (req, file, cb) => {
+        // reject a file
+        if (file.mimetype === 'image/jpeg') {
+            cb(null, true);
+        } else {
+            cb(new Error('type unmatched'), false);
+        }
+    };
+    const upload = multer({
+        storage,
+        limits: {
+            fileSize: 1024 * 1024 * 10, // 10MB
+        },
+        fileFilter,
+        // }).single('productImage');
+        // }).array('productImage', 1000);
+    }).any();
+
+    // upload.array('productImage', 2)
+    upload(req, res, err => {
+        if (err) {
+            const status = 415;
+            const message = `Error to upload file ${err}`;
+            res.status(status).json({ status, message });
+        } else {
+            const status = 200;
+            const uploadedData = req.files.map(data => ({
+                // uid: data.filename.replace('.jpg', ''),
+                // name: data.originalname,
+                url: `/img/${data.filename}`,
+            }));
+            console.log('---', uploadedData);
+            res.status(status).json(uploadedData);
+        }
+    });
 };

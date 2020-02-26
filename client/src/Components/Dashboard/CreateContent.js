@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Container, Row, Col, FormGroup, Button } from 'reactstrap';
 import {
     transitions,
@@ -15,52 +15,157 @@ import {
 import { post } from 'axios';
 import { useDropzone } from 'react-dropzone';
 
+const thumbsContainer = {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 16,
+};
+
+const thumb = {
+    display: 'inline-flex',
+    borderRadius: 2,
+    border: '1px solid #eaeaea',
+    marginBottom: 8,
+    marginRight: 8,
+    width: 100,
+    height: 100,
+    padding: 4,
+    boxSizing: 'border-box',
+};
+
+const thumbInner = {
+    display: 'flex',
+    minWidth: 0,
+    overflow: 'hidden',
+};
+
+const img = {
+    display: 'block',
+    width: 'auto',
+    height: '100%',
+};
+
+const DropZoneImage = ({
+    fileUploaded,
+    errorFromImageUpload,
+    uploadedImageData,
+}) => {
+    const [files, setFiles] = useState([]);
+    const [uploadingFile, setUploadingFile] = useState(false);
+    const onDrop = useCallback(
+        acceptedFiles => {
+            if (acceptedFiles.length > 3 || uploadedImageData > 3) {
+                errorFromImageUpload('You can not upload more then 3 images');
+                return;
+            }
+            errorFromImageUpload(false);
+            setUploadingFile(true);
+            setFiles(
+                acceptedFiles.map(file =>
+                    Object.assign(file, {
+                        preview: URL.createObjectURL(file),
+                    })
+                )
+            );
+            // Do something with the files
+            const data = new FormData();
+            for (let i = 0; i < acceptedFiles.length; i += 1) {
+                data.append('file', acceptedFiles[i]);
+            }
+            post('/api/img/upload', data)
+                .then(response => {
+                    // console.log('-----s', response);
+                    fileUploaded(response.data);
+                    setUploadingFile(false);
+                })
+                .catch(error => {
+                    setUploadingFile(false);
+                    console.log('====e====', error);
+                });
+        },
+        [fileUploaded, errorFromImageUpload, uploadedImageData]
+    );
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop,
+        accept: 'image/*',
+    });
+    const thumbs = uploadedImageData.map(file => (
+        <div style={thumb} key={file.url}>
+            <div style={thumbInner}>
+                <img src={file.url} style={img} alt="" />
+            </div>
+        </div>
+    ));
+    useEffect(
+        () => () => {
+            // Make sure to revoke the data uris to avoid memory leaks
+            files.forEach(file => URL.revokeObjectURL(file.preview));
+        },
+        [files]
+    );
+    return (
+        <>
+            <div {...getRootProps({ className: 'dropzone' })}>
+                <input multiple name="productImage" {...getInputProps()} />
+                <p>Drag 'n' drop some files here, or click to select files</p>
+            </div>
+            <small style={{ visibility: `${uploadingFile ? '' : 'hidden'}` }}>
+                Loading...
+            </small>
+            <aside style={thumbsContainer}>{thumbs}</aside>
+        </>
+    );
+};
 const CreateContent = () => {
     const alertPopUp = useAlert();
+    const [uploadedImageData, setUploadedImageData] = useState([]);
     const [loadingData, setLoadingData] = useState(false);
+    const [imageUploadValidation, setImageUploadValidation] = useState(false);
     const [formDatas, setFromDatas] = useState({
         title: '',
         description: '',
         price: '',
         country: '',
         City: '',
+        images: [],
     });
+
+    const fileUploaded = filesUrls => {
+        setUploadedImageData([...uploadedImageData, ...filesUrls]);
+    };
+
+    const errorFromImageUpload = errorMessage => {
+        setImageUploadValidation(errorMessage);
+    };
 
     const handleChange = e => {
         setLoadingData(false);
         setFromDatas({
-            // ...formDatas,
+            ...formDatas,
             [e.target.name]: e.target.value,
         });
     };
     const subTest = async (e, formData) => {
         e.preventDefault();
+        if (uploadedImageData.length === 0 && uploadedImageData.length < 4) {
+            setImageUploadValidation('Please Upload image');
+            return;
+        }
+
+        const allFormData = {
+            ...formData,
+            images: uploadedImageData,
+        };
         setLoadingData(true);
         try {
-            const response = await post('/api/createProperty', formData);
+            const response = await post('/api/createProperty', allFormData);
             alertPopUp.success(response.data.message);
         } catch (error) {
             setLoadingData(false);
         }
     };
 
-    const onDrop = useCallback(acceptedFiles => {
-        // Do something with the files
-        const data = new FormData();
-        for (let i = 0; i < acceptedFiles.length; i += 1) {
-            data.append('file', acceptedFiles[i]);
-        }
-        post('/img/upload', data)
-            .then(response => {
-                console.log('-----s', response);
-            })
-            .catch(error => {
-                console.log('====e====', error);
-            });
-    }, []);
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-    });
     return (
         <Container className="my-5">
             <Row>
@@ -143,21 +248,24 @@ const CreateContent = () => {
                                 onChange={handleChange}
                             />
                         </FormGroup>
-                        <div {...getRootProps()}>
-                            <input
-                                multiple
-                                name="productImage"
-                                {...getInputProps()}
-                            />
-                            {isDragActive ? (
-                                <p>Drop the files here ...</p>
-                            ) : (
-                                <p>
-                                    Drag 'n' drop some files here, or click to
-                                    select files
+                        <Col xs="12">
+                            <label htmlFor="imageUpload">
+                                Image Upload{' '}
+                                <span className="small">3 image must</span>
+                                <sup className="text-danger small">*</sup>
+                            </label>
+                            {imageUploadValidation && (
+                                <p className="text-danger small">
+                                    {imageUploadValidation}
                                 </p>
                             )}
-                        </div>
+                            <DropZoneImage
+                                id="imageUpload"
+                                fileUploaded={fileUploaded}
+                                errorFromImageUpload={errorFromImageUpload}
+                                uploadedImageData={uploadedImageData}
+                            />
+                        </Col>
                         <Col xs="12">
                             <Button
                                 disabled={loadingData}
