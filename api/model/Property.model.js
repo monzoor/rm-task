@@ -13,6 +13,12 @@ const propertySchema = new mongoose.Schema({
         country: String,
         city: String,
     },
+    booking: [
+        {
+            startDate: Date,
+            endDate: Date,
+        },
+    ],
     comments: [
         {
             userName: String,

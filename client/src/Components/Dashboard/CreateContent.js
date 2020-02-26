@@ -162,6 +162,7 @@ const CreateContent = () => {
             const response = await post('/api/createProperty', allFormData);
             alertPopUp.success(response.data.message);
         } catch (error) {
+            alertPopUp.danger(error.data.message);
             setLoadingData(false);
         }
     };

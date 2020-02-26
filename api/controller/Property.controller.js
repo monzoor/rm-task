@@ -46,6 +46,39 @@ exports.allProperties = async (req, res, next) => {
     }
 };
 
+exports.booking = async (req, res, next) => {
+    const { id, booking } = req.body;
+    try {
+        await PropertyModel.findOneAndUpdate(
+            {
+                _id: id,
+            },
+            {
+                $push: {
+                    booking: {
+                        startDate: booking.startDate,
+                        endDate: booking.endDate,
+                    },
+                },
+            }
+        )
+            .then(() => {
+                res.status(200).json({
+                    status: 'sucess',
+                    statusCode: 200,
+                    message: 'Sucessfuly booked',
+                });
+            })
+            .catch(() => {
+                if (Object.keys(allpropertiesData).length === 0) {
+                    throw new ErrorHandler(404, 'No Data Found');
+                    next();
+                }
+            });
+    } catch {
+        next(e);
+    }
+};
 exports.createProperties = async (req, res, next) => {
     console.log('-asdasd--', req.body);
     if (!req.body) {
@@ -67,7 +100,6 @@ exports.createProperties = async (req, res, next) => {
                 'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
         },
         image: req.body.images,
-
         comments: [
             {
                 userName: 'Wasiq',

@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Media, Button } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 import Icon from '../../Utils/IconUtils';
-
+import { post } from 'axios';
 import NotFound from '../../Utils/NoContentFound.js';
 import { Spinner } from '../../Utils/Loader';
 import useError from '../../CustomHook/ErrorHook';
+import moment from 'moment';
 
 import propertyDetailsAction from './_Actions/propertyDetailsAction';
 
@@ -185,12 +186,40 @@ const PropertyDetailsItems = ({
         </>
     );
 };
-const Reserve = ({ price }) => {
+const Reserve = ({ price, id, booking }) => {
+    const dispatch = useDispatch();
+    const [resetDatePicker, setResetDatePicker] = useState(false);
     const [daysCounterValue, setDaysCounterValue] = useState(0);
-    const priceValue = parseInt(price.match(/\d+/g).join(''), 10);
+    const [dateRanges, setDateRanges] = useState({
+        startDate: null,
+        endDate: null,
+    });
+    const priceValue = price.match(/\d+/g)
+        ? parseInt(price.match(/\d+/g).join(''), 10)
+        : 0;
     const currency = price.replace(/[0-9]/g, '');
-    const daysCounter = days => {
+
+    const dateRange = ({ startDate, endDate }) => {
+        setResetDatePicker(false);
+        const days = moment(endDate).diff(moment(startDate), 'days');
         setDaysCounterValue(days);
+        setDateRanges({
+            startDate,
+            endDate,
+        });
+    };
+    const reserve = async () => {
+        const data = {
+            id,
+            booking: dateRanges,
+        };
+        try {
+            await post('/api/booking', data);
+            dispatch(propertyDetailsAction(id));
+            setResetDatePicker(true);
+        } catch (error) {
+            console.log('---', error);
+        }
     };
     return (
         <Row className="border p-3">
@@ -211,7 +240,7 @@ const Reserve = ({ price }) => {
                 </p>
                 <hr />
                 <p className="mb-0 small">Dates</p>
-                <DatePicker reserve daysCounter={daysCounter} />
+                <DatePicker reserve dateRange={dateRange} booking={booking} />
                 {daysCounterValue !== 0 && (
                     <dl className="mt-3">
                         <dt>{`${currency}${priceValue} x ${daysCounterValue} night`}</dt>
@@ -224,8 +253,12 @@ const Reserve = ({ price }) => {
                     size="lg"
                     className="font-weight-light mt-4 border-0 small"
                     style={{ backgroundColor: '#FF5A5F' }}
+                    onClick={reserve}
                 >
                     Reserve
+                    {resetDatePicker && (
+                        <p className="small">Your booking has been confirmed</p>
+                    )}
                 </Button>
             </Col>
         </Row>
@@ -234,6 +267,7 @@ const Reserve = ({ price }) => {
 
 const PropertyDetailsContainer = ({ details }) => {
     const {
+        _id,
         title,
         image,
         description,
@@ -242,6 +276,7 @@ const PropertyDetailsContainer = ({ details }) => {
         type,
         creator,
         price,
+        booking,
     } = details;
 
     let rating = 0;
@@ -270,7 +305,7 @@ const PropertyDetailsContainer = ({ details }) => {
                     />
                 </Col>
                 <Col xs="4">
-                    <Reserve price={price} />
+                    <Reserve id={_id} price={price} booking={booking} />
                 </Col>
             </Row>
         </>

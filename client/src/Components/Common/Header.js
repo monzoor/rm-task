@@ -9,6 +9,7 @@ import {
     NavLink,
     FormGroup,
 } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import {
     ValidationForm,
     TextInputGroup,
@@ -31,7 +32,7 @@ const HeaderSearchBox = () => {
                                     // className="border-right-0"
                                     name="name"
                                     // value={formDatas.name}
-                                    id="userName"
+                                    id="searchTop"
                                     minLength="4"
                                     required
                                     prepend={
@@ -53,7 +54,7 @@ const HeaderSearchBox = () => {
                                 <TextInputGroup
                                     name="name"
                                     // value={formDatas.name}
-                                    id="userName"
+                                    id="dates"
                                     minLength="4"
                                     required
                                     prepend={
@@ -75,7 +76,7 @@ const HeaderSearchBox = () => {
                                 <TextInputGroup
                                     name="name"
                                     // value={formDatas.name}
-                                    id="userName"
+                                    id="userItems"
                                     minLength="4"
                                     required
                                     prepend={
@@ -107,9 +108,9 @@ const StaticNav = () => {
                 </NavLink>
             </NavItem>
             <NavItem className="nav-item">
-                <NavLink to="/" className="nav-link">
-                    Help
-                </NavLink>
+                <Link to="/create" className="nav-link">
+                    Create
+                </Link>
             </NavItem>
             <NavItem className="nav-item">
                 <NavLink to="/" className="nav-link">
@@ -170,7 +171,7 @@ const Search = () => {
                                     // className="border-right-0"
                                     name="name"
                                     // value={formDatas.name}
-                                    id="userName"
+                                    id="searText"
                                     minLength="4"
                                     required
                                     prepend={
@@ -193,7 +194,7 @@ const Search = () => {
                                     // className="border-right-0"
                                     name="name"
                                     // value={formDatas.name}
-                                    id="userName"
+                                    id="date"
                                     minLength="4"
                                     required
                                     prepend={
@@ -216,7 +217,7 @@ const Search = () => {
                                     // className="border-right-0"
                                     name="name"
                                     // value={formDatas.name}
-                                    id="userName"
+                                    id="items"
                                     minLength="4"
                                     required
                                     prepend={
