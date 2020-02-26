@@ -15,7 +15,7 @@ import {
 } from 'react-bootstrap4-form-validation';
 
 import Icon from '../../Utils/IconUtils';
-
+import Date from './DatePicker';
 const subTest = () => {
     console.log('---');
 };
@@ -255,6 +255,7 @@ const Header = () => {
                 <SecendaryStaticNav />
             </Col>
             <Col xs="12">
+                <Date />
                 <Container>
                     <Search />
                 </Container>
