@@ -12,3 +12,26 @@
         min-height: 50vh;
     }
 }
+
+dl {
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    @extend .text-muted;
+}
+dt {
+    float: left;
+    width: 50%;
+    padding: 0;
+    margin: 0;
+    @extend .font-weight-light;
+}
+dd {
+    float: left;
+    width: 50%;
+    padding: 0;
+    margin: 0;
+    @extend .text-right;
+    @extend .font-weight-light;
+}

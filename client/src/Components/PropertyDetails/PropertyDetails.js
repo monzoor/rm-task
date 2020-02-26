@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Col, Media } from 'reactstrap';
+import { Row, Col, Media, Button } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 import Icon from '../../Utils/IconUtils';
 
@@ -9,6 +9,8 @@ import { Spinner } from '../../Utils/Loader';
 import useError from '../../CustomHook/ErrorHook';
 
 import propertyDetailsAction from './_Actions/propertyDetailsAction';
+
+import DatePicker from '../Common/DatePicker';
 
 const PropertyHeader = ({ title, rating, location }) => {
     const ratings = [];
@@ -183,14 +185,48 @@ const PropertyDetailsItems = ({
         </>
     );
 };
-const Reserve = () => {
+const Reserve = ({ price }) => {
+    const [daysCounterValue, setDaysCounterValue] = useState(0);
+    const priceValue = parseInt(price.match(/\d+/g).join(''), 10);
+    const currency = price.replace(/[0-9]/g, '');
+    const daysCounter = days => {
+        setDaysCounterValue(days);
+    };
     return (
-        <Row className="border">
-            <Col>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora
-                eius ad illum reiciendis ducimus veritatis ut quia repellat
-                magnam nulla in, corrupti nihil est pariatur nostrum quisquam
-                voluptatibus eum maxime!
+        <Row className="border p-3">
+            <Col xs="12">
+                <p className="mb-1">
+                    <span className="font-weight-bold h5 mr-1">$24</span>
+                    <span className="small font-weight-light">per night</span>
+                </p>
+                <p className="small">
+                    <Icon
+                        className="mr-1"
+                        color="#00A799"
+                        size={8}
+                        icon="star"
+                    />
+                    <span className="font-weight-bold">4.48 </span>
+                    <span className="text-muted">(215 reviews)</span>
+                </p>
+                <hr />
+                <p className="mb-0 small">Dates</p>
+                <DatePicker reserve daysCounter={daysCounter} />
+                {daysCounterValue !== 0 && (
+                    <dl className="mt-3">
+                        <dt>{`${currency}${priceValue} x ${daysCounterValue} night`}</dt>
+                        <dd>{`${currency}${priceValue * daysCounterValue}`}</dd>
+                    </dl>
+                )}
+                <Button
+                    color="primary"
+                    block
+                    size="lg"
+                    className="font-weight-light mt-4 border-0 small"
+                    style={{ backgroundColor: '#FF5A5F' }}
+                >
+                    Reserve
+                </Button>
             </Col>
         </Row>
     );
@@ -205,6 +241,7 @@ const PropertyDetailsContainer = ({ details }) => {
         comments,
         type,
         creator,
+        price,
     } = details;
 
     let rating = 0;
@@ -233,7 +270,7 @@ const PropertyDetailsContainer = ({ details }) => {
                     />
                 </Col>
                 <Col xs="4">
-                    <Reserve />
+                    <Reserve price={price} />
                 </Col>
             </Row>
         </>

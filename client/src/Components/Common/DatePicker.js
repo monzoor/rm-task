@@ -10,62 +10,62 @@ import moment from 'moment';
 
 import '../../../node_modules/react-dates/lib/css/_datepicker.css';
 
-const DatePicker = () => {
-    const [detePickerItems, setDatePickerItems] = useState({
-        startDate: moment(),
-        endDate: moment(),
-        focusedInput: null,
+const DatePicker = ({ daysCounter, reserve }) => {
+    const detePickerItems = {
         dateFormat: 'DD/MM/YYYY',
         small: false,
         block: false,
         orientation: 'horizontal',
-        numMonths: 2,
-    });
+        numMonths: 1,
+    };
+    const [startDateItems, setStartDateItems] = useState(null);
+    const [endDateItems, setEndDateItems] = useState(null);
+    const [focusInputItems, setFocusInputItems] = useState(null);
 
     const BLOCKED_DATES = [
-        moment().add(10, 'days'),
-        moment().add(11, 'days'),
+        // moment('Sun Mar 01 2020 20:48:50 GMT+0600'),
+        moment(new Date()).add(3, 'M'),
         moment().add(12, 'days'),
     ];
 
     const handleDatesChange = ({ startDate, endDate }) => {
-        console.log('=====', new moment(startDate).format('DD/MM/YYYY'));
-
-        setDatePickerItems({
-            ...detePickerItems,
-            startDate,
-            endDate,
-            // startDate:
-            //     startDate !== null ? startDate : detePickerItems.startDate,
-            // endDate: endDate !== null ? endDate : detePickerItems.endDate,
-            // startDate: new moment(startDate).format('DD/MM/YYYY'),
-            // endDate: new moment(endDate).format('DD/MM/YYYY'),
-        });
+        setStartDateItems(startDate);
+        setEndDateItems(endDate);
     };
     const handleFocusChange = focusedInput => {
         // console.log('----', focusedInput);
-        setDatePickerItems({ ...detePickerItems, focusedInput });
+        setFocusInputItems(focusedInput);
         // setDatePickerItems.focusedInput = focusedInput;
     };
+    // console.log('----', moment().add(3, 'M'));
 
     const handleIsDayBlocked = day => {
-        return BLOCKED_DATES.filter(d => d.isSame(day, 'day')).length > 0;
-    };
+        const tt =
+            BLOCKED_DATES.filter(d => d.isSame(day, 'day')).length > 0 ||
+            moment(day).diff(moment(), 'M') > 2;
 
-    console.log(
-        '----',
-        new moment(detePickerItems.startDate).format('DD/MM/YYYY')
-    );
+        return tt;
+        // return moment(day).diff(moment(), 'M') > 2;
+    };
+    const onClose = dates => {
+        // console.log(
+        //         '====',
+        //         moment('Sun Mar 01 2020 20:48:50 GMT+0600', 'DD/MM/YYYY')
+        //     );
+        if (reserve && dates.endDate && dates.startDate) {
+            daysCounter(dates.endDate.diff(dates.startDate, 'days'));
+        }
+    };
 
     return (
         <div>
             <DateRangePicker
                 startDateId="startDate"
                 endDateId="endDate"
-                startDate={detePickerItems.startDate}
-                endDate={detePickerItems.endDate}
+                startDate={startDateItems}
+                endDate={endDateItems}
                 onDatesChange={handleDatesChange}
-                focusedInput={detePickerItems.focusedInput}
+                focusedInput={focusInputItems}
                 onFocusChange={handleFocusChange}
                 displayFormat={detePickerItems.dateFormat}
                 hideKeyboardShortcutsPanel={true}
@@ -73,6 +73,7 @@ const DatePicker = () => {
                 block={detePickerItems.block}
                 small={detePickerItems.small}
                 isDayBlocked={handleIsDayBlocked}
+                onClose={onClose}
             />
         </div>
     );
