@@ -6,11 +6,15 @@ const { ErrorHandler } = require('../utils/errorHandle');
 const PerpertyController = require('../controller/Property.controller');
 
 Router.get('/allProperties/:itemType?', PerpertyController.allProperties);
+Router.get('/search', PerpertyController.allProperties);
 Router.get('/details/:id', PerpertyController.allProperties);
+
 Router.post('/createProperty', PerpertyController.createProperties);
 Router.post('/createProperty/:image?', PerpertyController.createProperties);
-Router.get('/deleteAll', PerpertyController.deleteAll);
 Router.post('/img/upload', PerpertyController.imageUpload);
+
+Router.get('/deleteAll', PerpertyController.deleteAll);
+
 Router.post('/booking', PerpertyController.booking);
 
 Router.get('/*', (res, req, next) => {

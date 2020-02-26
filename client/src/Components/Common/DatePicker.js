@@ -25,7 +25,7 @@ const DatePicker = ({ dateRange, reserve, booking }) => {
         small: false,
         block: false,
         orientation: 'horizontal',
-        numMonths: 1,
+        numMonths: reserve ? 1 : 2,
     };
     const [startDateItems, setStartDateItems] = useState(null);
     const [endDateItems, setEndDateItems] = useState(null);
@@ -56,7 +56,8 @@ const DatePicker = ({ dateRange, reserve, booking }) => {
     const handleIsDayBlocked = day => {
         const blockedDates =
             BLOCKED_DATES.filter(d => moment(d).isSame(day, 'day')).length >
-                0 || moment(day).diff(moment(), 'M') > 2;
+                0 ||
+            (reserve && moment(day).diff(moment(), 'M') > 2);
 
         return blockedDates;
     };

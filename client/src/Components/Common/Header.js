@@ -165,14 +165,12 @@ const Search = () => {
             <Col xs="12">
                 <ValidationForm onSubmit={subTest}>
                     <Row className="search--main mb-3">
-                        <Col xs="5" className="px-0 ml-1 border property">
+                        <Col xs="4" className="px-0 ml-1 border property">
                             <FormGroup>
                                 <TextInputGroup
-                                    // className="border-right-0"
                                     name="name"
                                     // value={formDatas.name}
                                     id="searText"
-                                    minLength="4"
                                     required
                                     prepend={
                                         <span className="input-group-text border-0">
@@ -189,37 +187,16 @@ const Search = () => {
                             </FormGroup>
                         </Col>
                         <Col className="px-0 border">
-                            <FormGroup className="location">
-                                <TextInputGroup
-                                    // className="border-right-0"
-                                    name="name"
-                                    // value={formDatas.name}
-                                    id="date"
-                                    minLength="4"
-                                    required
-                                    prepend={
-                                        <span className="input-group-text border-0">
-                                            <Icon
-                                                color="#444"
-                                                size={15}
-                                                icon="calendar"
-                                            />
-                                        </span>
-                                    }
-                                    placeholder="Anywhere"
-                                    // onChange={handleChange}
-                                />
+                            <FormGroup className="location main-datepicker">
+                                <Date />
                             </FormGroup>
                         </Col>
                         <Col className="px-0 border person">
                             <FormGroup>
                                 <TextInputGroup
-                                    // className="border-right-0"
                                     name="name"
                                     // value={formDatas.name}
                                     id="items"
-                                    minLength="4"
-                                    required
                                     prepend={
                                         <span className="input-group-text border-0">
                                             <Icon
@@ -256,7 +233,6 @@ const Header = () => {
                 <SecendaryStaticNav />
             </Col>
             <Col xs="12">
-                <Date />
                 <Container>
                     <Search />
                 </Container>
