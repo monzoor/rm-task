@@ -35,3 +35,32 @@ dd {
     @extend .text-right;
     @extend .font-weight-light;
 }
+.slick-next {
+    right: 10px !important;
+}
+.slick-prev {
+    left: 10px !important;
+    z-index: 999999;
+}
+.slick-arrow {
+    opacity: 0;
+    transition: all 0.3s;
+}
+.slick-slider {
+    &:hover {
+        .slick-arrow {
+            opacity: 1;
+        }
+    }
+}
+.slick-dots {
+    bottom: 14px !important;
+}
+.slick-dots li.slick-active button:before {
+    color: white !important;
+    opacity: 0.85 !important;
+}
+.slick-dots li button:before {
+    color: white !important;
+    opacity: 0.5 !important;
+}

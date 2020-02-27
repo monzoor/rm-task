@@ -4,9 +4,10 @@ import PublicLayout from '../Components/Layouts/PublicLayout';
 import NotFound from '../Components/404';
 const Home = lazy(() => import('../Components/Home/Home'));
 const PropertyDetais = lazy(() =>
-    import('../Components/PropertyDetails/PropertyDetails.js')
+    import('../Components/PropertyDetails/PropertyDetails')
 );
-const Create = lazy(() => import('../Components/Dashboard/CreateContent.js'));
+const Create = lazy(() => import('../Components/Dashboard/CreateContent'));
+const ListItems = lazy(() => import('../Components/ListItems/ListItems.js'));
 export default [
     {
         path: '/',
@@ -18,6 +19,12 @@ export default [
         path: '/details/:id',
         exact: true,
         component: PropertyDetais,
+        layout: PublicLayout,
+    },
+    {
+        path: '/list',
+        exact: true,
+        component: ListItems,
         layout: PublicLayout,
     },
     {

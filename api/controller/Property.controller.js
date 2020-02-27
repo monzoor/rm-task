@@ -2,6 +2,10 @@ const PropertyModel = require('../model/Property.model');
 const { ErrorHandler } = require('../utils/errorHandle');
 const multer = require('multer');
 
+let options = {
+    page: 1,
+    limit: 10,
+};
 exports.deleteAll = async (req, res, next) => {
     try {
         await PropertyModel.remove({});
@@ -14,11 +18,37 @@ exports.deleteAll = async (req, res, next) => {
         next(e);
     }
 };
+
+exports.search = async (req, res, next) => {
+    try {
+        console.log('=====', req.query.location);
+
+        allpropertiesData = await PropertyModel.paginate(
+            {
+                $or: [
+                    {
+                        'location.country': new RegExp(
+                            req.query.location,
+                            'gi'
+                        ),
+                    },
+                    { 'location.city': new RegExp(req.query.location, 'gi') },
+                ],
+            },
+            options
+        );
+        const dataPrep = {
+            data: allpropertiesData.docs,
+            paginationInfo: {
+                totalPages: allpropertiesData.totalPages,
+            },
+        };
+        res.json(dataPrep);
+    } catch (e) {
+        next(e);
+    }
+};
 exports.allProperties = async (req, res, next) => {
-    let options = {
-        page: 1,
-        limit: 10,
-    };
     try {
         let allpropertiesData = {};
         if (req.params.itemType === 'priority') {
@@ -34,9 +64,8 @@ exports.allProperties = async (req, res, next) => {
         } else {
             allpropertiesData = await PropertyModel.paginate({}, options);
         }
-        console.log('=====ss=====', options);
 
-        if (Object.keys(allpropertiesData).length === 0) {
+        if (allpropertiesData.docs.length === 0) {
             throw new ErrorHandler(404, 'No Data Found');
             next();
         }
@@ -113,19 +142,19 @@ exports.createProperties = async (req, res, next) => {
                 'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
         },
         image: req.body.images,
-        // comments: [
-        //     {
-        //         userName: 'Wasiq',
-        //         avatar:
-        //             'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
-        //         rating: 5,
-        //         comments: 'We hated your smelly shitty house',
-        //         location: {
-        //             country: 'Bangladesh',
-        //             city: 'Dhaka',
-        //         },
-        //     },
-        // ],
+        comments: [
+            {
+                userName: 'Wasiq',
+                avatar:
+                    'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
+                rating: 5,
+                comments: 'We hated your smelly shitty house',
+                location: {
+                    country: 'Bangladesh',
+                    city: 'Dhaka',
+                },
+            },
+        ],
     });
     try {
         await newProperty

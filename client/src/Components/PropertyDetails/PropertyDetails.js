@@ -340,7 +340,6 @@ const PropertyDetails = ({ match }) => {
             setNotFound(true);
         }
     }, [hasDetailsPropertyError]);
-
     return (
         <div className="mh--50">
             {loadingItem ? (
@@ -348,7 +347,7 @@ const PropertyDetails = ({ match }) => {
             ) : notFound ? (
                 <NotFound />
             ) : (
-                <PropertyDetailsContainerMemo details={details} />
+                <PropertyDetailsContainerMemo details={details[0]} />
             )}
         </div>
     );

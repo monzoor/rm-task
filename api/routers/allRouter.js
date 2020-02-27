@@ -6,8 +6,9 @@ const { ErrorHandler } = require('../utils/errorHandle');
 const PerpertyController = require('../controller/Property.controller');
 
 Router.get('/allProperties/:itemType?', PerpertyController.allProperties);
-Router.get('/search', PerpertyController.allProperties);
 Router.get('/details/:id', PerpertyController.allProperties);
+
+Router.get('/search', PerpertyController.search);
 
 Router.post('/createProperty', PerpertyController.createProperties);
 Router.post('/createProperty/:image?', PerpertyController.createProperties);

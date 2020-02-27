@@ -2,13 +2,13 @@ import axios from 'axios';
 
 import ErrorDispatch from '../../../ErrorHandler/ErrorDispatcher';
 
-const propertyDetailsAction = id => {
+const searchAction = query => {
     return dispatch => {
         return axios
-            .get(`/api/details/${id}`)
+            .get(`/api/search?${query}`)
             .then(response => {
                 dispatch({
-                    type: 'PROPERTY_DETAILS',
+                    type: 'PROPERTIES_LIST',
                     ...response.data,
                 });
             })
@@ -17,7 +17,7 @@ const propertyDetailsAction = id => {
                 const errors = {
                     dispatch,
                     ...errorResponse,
-                    from: 'propertyDetails',
+                    from: 'propertiesLists',
                 };
                 if (!errorResponse || errorResponse.status === 500) {
                     ErrorDispatch({
@@ -36,4 +36,4 @@ const propertyDetailsAction = id => {
     };
 };
 
-export default propertyDetailsAction;
+export default searchAction;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Container,
     Row,
@@ -14,9 +14,15 @@ import {
     ValidationForm,
     TextInputGroup,
 } from 'react-bootstrap4-form-validation';
+import { withRouter } from 'react-router-dom';
+import queryString from 'query-string';
+import history from '../../Utils/history';
 
 import Icon from '../../Utils/IconUtils';
 import Date from './DatePicker';
+
+// import searchAction from './_Actions/_searchAction';
+
 const subTest = () => {
     console.log('---');
 };
@@ -151,7 +157,28 @@ const SecendaryStaticNav = () => {
         </Nav>
     );
 };
-const Search = () => {
+const Search = props => {
+    // console.log('----', queryString.parse(props.location.search));
+    const queryStringDatas = queryString.parse(props.location.search);
+    const [formDatas, setFormDatas] = useState({
+        location: Object.keys(queryStringDatas)
+            ? queryStringDatas.location
+                ? queryStringDatas.location
+                : ''
+            : '',
+    });
+    const handleChange = e => {
+        setFormDatas({
+            ...formDatas,
+            [e.target.name]: e.target.value,
+        });
+    };
+    const SearchSubmit = (e, formData) => {
+        e.preventDefault();
+        history.push(`/list?location=${formData.location}`);
+        // dispatch(searchAction(`location=${formData.location}`));
+    };
+
     return (
         <Row className="bg-primary mb-5">
             <Col xs="12">
@@ -163,14 +190,14 @@ const Search = () => {
             </Col>
 
             <Col xs="12">
-                <ValidationForm onSubmit={subTest}>
+                <ValidationForm onSubmit={SearchSubmit}>
                     <Row className="search--main mb-3">
                         <Col xs="4" className="px-0 ml-1 border property">
                             <FormGroup>
                                 <TextInputGroup
                                     name="location"
-                                    // value={formDatas.name}
-                                    id="searText"
+                                    value={formDatas.location}
+                                    id="searchText"
                                     required
                                     prepend={
                                         <span className="input-group-text border-0">
@@ -182,7 +209,7 @@ const Search = () => {
                                         </span>
                                     }
                                     placeholder="Anywhere"
-                                    // onChange={handleChange}
+                                    onChange={handleChange}
                                 />
                             </FormGroup>
                         </Col>
@@ -234,11 +261,11 @@ const Header = () => {
             </Col>
             <Col xs="12">
                 <Container>
-                    <Search />
+                    <MainHeaderSearch />
                 </Container>
             </Col>
         </Row>
     );
 };
-
+const MainHeaderSearch = withRouter(Search);
 export default Header;
