@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const propertySchema = new mongoose.Schema({
     title: String,
@@ -37,6 +38,8 @@ const propertySchema = new mongoose.Schema({
         },
     ],
 });
+
+propertySchema.plugin(mongoosePaginate);
 
 const Property = mongoose.model('Property', propertySchema);
 

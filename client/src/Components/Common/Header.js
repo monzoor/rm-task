@@ -168,7 +168,7 @@ const Search = () => {
                         <Col xs="4" className="px-0 ml-1 border property">
                             <FormGroup>
                                 <TextInputGroup
-                                    name="name"
+                                    name="location"
                                     // value={formDatas.name}
                                     id="searText"
                                     required

@@ -15,31 +15,44 @@ exports.deleteAll = async (req, res, next) => {
     }
 };
 exports.allProperties = async (req, res, next) => {
+    let options = {
+        page: 1,
+        limit: 10,
+    };
     try {
         let allpropertiesData = {};
         if (req.params.itemType === 'priority') {
-            allpropertiesData = await PropertyModel.find({
-                comments: { $gt: [] },
-            });
+            allpropertiesData = await PropertyModel.paginate(
+                { comments: { $gt: [] } },
+                options
+            );
         } else if (req.params.id) {
-            allpropertiesData = await PropertyModel.findById(
-                req.params.id
-            ).catch(() => {
-                if (Object.keys(allpropertiesData).length === 0) {
-                    throw new ErrorHandler(404, 'No Data Found');
-                    next();
-                }
+            options = {};
+            allpropertiesData = await PropertyModel.paginate({
+                _id: req.params.id,
             });
         } else {
-            allpropertiesData = await PropertyModel.find();
+            allpropertiesData = await PropertyModel.paginate({}, options);
         }
+        console.log('=====ss=====', options);
+
         if (Object.keys(allpropertiesData).length === 0) {
             throw new ErrorHandler(404, 'No Data Found');
             next();
         }
-        res.json({
-            data: allpropertiesData,
-        });
+
+        let dataPrep = {
+            data: allpropertiesData.docs,
+        };
+        if (Object.keys(options).length) {
+            dataPrep = {
+                ...dataPrep,
+                paginationInfo: {
+                    totalPages: allpropertiesData.totalPages,
+                },
+            };
+        }
+        res.json(dataPrep);
     } catch (e) {
         console.error('========', e);
         next(e);
@@ -100,19 +113,19 @@ exports.createProperties = async (req, res, next) => {
                 'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
         },
         image: req.body.images,
-        comments: [
-            {
-                userName: 'Wasiq',
-                avatar:
-                    'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
-                rating: 5,
-                comments: 'We hated your smelly shitty house',
-                location: {
-                    country: 'Bangladesh',
-                    city: 'Dhaka',
-                },
-            },
-        ],
+        // comments: [
+        //     {
+        //         userName: 'Wasiq',
+        //         avatar:
+        //             'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
+        //         rating: 5,
+        //         comments: 'We hated your smelly shitty house',
+        //         location: {
+        //             country: 'Bangladesh',
+        //             city: 'Dhaka',
+        //         },
+        //     },
+        // ],
     });
     try {
         await newProperty
