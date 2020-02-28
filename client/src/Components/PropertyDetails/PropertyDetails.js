@@ -190,7 +190,7 @@ const PropertyDetailsItems = ({
         </>
     );
 };
-const Reserve = ({ price, id, booking }) => {
+const Reserve = ({ price, id, booking, rating, totalReviews }) => {
     const dispatch = useDispatch();
     const [resetDatePicker, setResetDatePicker] = useState(false);
     const [daysCounterValue, setDaysCounterValue] = useState(0);
@@ -229,19 +229,20 @@ const Reserve = ({ price, id, booking }) => {
         <Row className="border p-3">
             <Col xs="12">
                 <p className="mb-1">
-                    <span className="font-weight-bold h5 mr-1">$24</span>
+                    <span className="font-weight-bold h5 mr-1">{`${currency}${priceValue}`}</span>
                     <span className="small font-weight-light">per night</span>
                 </p>
-                <p className="small">
-                    <Icon
-                        className="mr-1"
-                        color="#00A799"
-                        size={8}
-                        icon="star"
-                    />
-                    <span className="font-weight-bold">4.48 </span>
-                    <span className="text-muted">(215 reviews)</span>
+                <Icon
+                    className="mr-1 mt-1 float-left"
+                    color="#00A799"
+                    size={12}
+                    icon="star"
+                />
+                <p className="small float-left mb-0">
+                    <span className="font-weight-bold mt-2">{rating} </span>
+                    <span className="text-muted mt-2">{`(${totalReviews} reviews)`}</span>
                 </p>
+                <div className="clearfix" />
                 <hr />
                 <p className="mb-0 small">Dates</p>
                 <DatePicker reserve dateRange={dateRange} booking={booking} />
@@ -284,12 +285,11 @@ const PropertyDetailsContainer = ({ details }) => {
     } = details;
 
     let rating = 0;
-    let ratings = comments.map(comment => {
+    comments.map(comment => {
         rating = rating + comment.rating;
         return rating;
     });
-    ratings = parseInt(ratings / comments.length, 10);
-
+    const ratings = parseInt(rating / comments.length, 10);
     return (
         <>
             <PropertyHeader
@@ -309,7 +309,13 @@ const PropertyDetailsContainer = ({ details }) => {
                     />
                 </Col>
                 <Col xs="4">
-                    <Reserve id={_id} price={price} booking={booking} />
+                    <Reserve
+                        id={_id}
+                        price={price}
+                        rating={ratings}
+                        totalReviews={comments.length}
+                        booking={booking}
+                    />
                 </Col>
             </Row>
         </>
@@ -328,7 +334,6 @@ const AddComment = props => {
         setCommentInput(!showCommnetInput);
     };
     const randomUser = staticUserData[Math.floor(Math.random() * 3)];
-    console.log(randomUser);
 
     const submitForm = async (e, formData) => {
         e.preventDefault();
@@ -341,11 +346,9 @@ const AddComment = props => {
         };
 
         const response = await post(`/api/comments/${id}`, data);
-        // .then(() => {
-
-        // });
-        console.log(response);
-        dispatch(propertyDetailsAction(id));
+        if (response.status === 200) {
+            dispatch(propertyDetailsAction(id));
+        }
     };
     return (
         <>
