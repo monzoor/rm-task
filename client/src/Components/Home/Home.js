@@ -27,13 +27,15 @@ const FeaturePropertiesLoaders = () => (
 const StaticHeader = () => {
     return (
         <Row>
-            <p className="h4">
-                What guests are saying about home in the United kingdom
-            </p>
-            <p className="small font-weight-light">
-                United kingdom homes were rated <b>4.7 out of 5 stars</b> whith{' '}
-                <b>10,500,00+ reviews</b>
-            </p>
+            <Col xs="12">
+                <p className="h4">
+                    What guests are saying about home in the United kingdom
+                </p>
+                <p className="small font-weight-light">
+                    United kingdom homes were rated <b>4.7 out of 5 stars</b>{' '}
+                    whith <b>10,500,00+ reviews</b>
+                </p>
+            </Col>
         </Row>
     );
 };

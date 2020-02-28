@@ -6,10 +6,9 @@ import {
     Navbar,
     Nav,
     NavItem,
-    NavLink,
     FormGroup,
 } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import {
     ValidationForm,
     TextInputGroup,
@@ -109,7 +108,7 @@ const StaticNav = () => {
     return (
         <Nav>
             <NavItem className="nav-item">
-                <NavLink to="/" className="nav-link">
+                <NavLink to="/host" className="nav-link">
                     Become a host
                 </NavLink>
             </NavItem>
@@ -119,12 +118,12 @@ const StaticNav = () => {
                 </Link>
             </NavItem>
             <NavItem className="nav-item">
-                <NavLink to="/" className="nav-link">
+                <NavLink to="/signup" className="nav-link">
                     Sign Up
                 </NavLink>
             </NavItem>
             <NavItem className="nav-item">
-                <NavLink to="/" className="nav-link">
+                <NavLink to="/login" className="nav-link">
                     Log in
                 </NavLink>
             </NavItem>
@@ -135,22 +134,22 @@ const SecendaryStaticNav = () => {
     return (
         <Nav className="small shadow-sm nav--secendary px-2">
             <NavItem className="nav-item">
-                <NavLink to="/" className="nav-link active">
-                    FOR YOU
+                <NavLink exact to="/" className="nav-link">
+                    HOME
                 </NavLink>
             </NavItem>
             <NavItem className="nav-item">
-                <NavLink to="/" className="nav-link">
-                    HOMES
+                <NavLink exact to="/list" className="nav-link">
+                    LIST
                 </NavLink>
             </NavItem>
             <NavItem className="nav-item">
-                <NavLink to="/" className="nav-link">
+                <NavLink to="/exp" className="nav-link">
                     EXPERIENCE
                 </NavLink>
             </NavItem>
             <NavItem className="nav-item">
-                <NavLink to="/" className="nav-link">
+                <NavLink to="/place" className="nav-link">
                     PLACES
                 </NavLink>
             </NavItem>

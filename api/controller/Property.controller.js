@@ -66,10 +66,11 @@ exports.allProperties = async (req, res, next) => {
         };
         let allpropertiesData = {};
         if (req.params.itemType === 'priority') {
-            allpropertiesData = await PropertyModel.paginate(
-                { comments: { $gt: [] } },
-                options
-            );
+            // allpropertiesData = await PropertyModel.paginate(
+            //     { comments: { $gt: [] } },
+            //     options
+            // );
+            allpropertiesData = await PropertyModel.paginate({}, options);
         } else if (req.params.id) {
             options = {};
             allpropertiesData = await PropertyModel.paginate({

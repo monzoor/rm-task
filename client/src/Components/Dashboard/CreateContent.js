@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Container, Row, Col, FormGroup, Button } from 'reactstrap';
+import { Link } from 'react-router-dom';
+
 import {
     transitions,
     positions,
@@ -169,6 +171,7 @@ const CreateContent = () => {
 
     return (
         <Container className="my-5">
+            <Link to="/">Home</Link>
             <Row>
                 <Col xs="12" className="mb-4">
                     <h4>Create property</h4>
