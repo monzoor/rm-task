@@ -2,30 +2,34 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Media, Button } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
-import Icon from '../../Utils/IconUtils';
+import moment from 'moment';
 import { post } from 'axios';
+import {
+    ValidationForm,
+    TextInput,
+    SelectGroup,
+} from 'react-bootstrap4-form-validation';
+
+// Static data
+import staticUserData from '../../Config/staticUserData.js';
+
+// Utils
+import Icon from '../../Utils/IconUtils';
 import NotFound from '../../Utils/NoContentFound.js';
 import { Spinner } from '../../Utils/Loader';
-import useError from '../../CustomHook/ErrorHook';
-import moment from 'moment';
+import { RatingCreator } from '../../Utils/Utils';
 
+// Custom Hooks
+import useError from '../../CustomHook/ErrorHook';
+
+// Actions
 import propertyDetailsAction from './_Actions/propertyDetailsAction';
 
+// Component
 import DatePicker from '../Common/DatePicker';
 
 const PropertyHeader = ({ title, rating, location }) => {
-    const ratings = [];
-    for (let i = 1; i <= rating; i++) {
-        ratings.push(
-            <Icon
-                key={i}
-                className="mr-2"
-                color="#ffbb06"
-                size={20}
-                icon="star"
-            />
-        );
-    }
+    const ratings = RatingCreator({ rating: rating, size: 20 });
     return (
         <Row>
             <Col xs="auto" className="pr-0">
@@ -311,6 +315,164 @@ const PropertyDetailsContainer = ({ details }) => {
         </>
     );
 };
+
+const AddComment = props => {
+    const dispatch = useDispatch();
+    const { match } = props;
+    const { params } = match;
+    const { id } = params;
+
+    const [showCommnetInput, setCommentInput] = useState(false);
+
+    const showComment = () => {
+        setCommentInput(!showCommnetInput);
+    };
+    const randomUser = staticUserData[Math.floor(Math.random() * 3)];
+    console.log(randomUser);
+
+    const submitForm = async (e, formData) => {
+        e.preventDefault();
+        const data = {
+            location: randomUser.location,
+            userName: randomUser.name,
+            avatar: randomUser.avatar,
+            rating: parseInt(formData.rating, 10),
+            comments: formData.comments,
+        };
+
+        const response = await post(`/api/comments/${id}`, data);
+        // .then(() => {
+
+        // });
+        console.log(response);
+        dispatch(propertyDetailsAction(id));
+    };
+    return (
+        <>
+            <button
+                onClick={showComment}
+                type="button"
+                className="btn btn-link small p-0 mb-2"
+            >
+                <span className="small">
+                    {showCommnetInput ? 'Close' : 'Add comment'}
+                </span>
+            </button>
+            {showCommnetInput && (
+                <Row>
+                    <Col xs="12">
+                        <Media>
+                            <Media left className="mr-3">
+                                <img
+                                    src={randomUser.avatar}
+                                    className="rounded-circle"
+                                    alt=""
+                                    width="50px"
+                                    height="50px"
+                                />
+                                <p className="small text-center">
+                                    {randomUser.name}
+                                </p>
+                            </Media>
+                            <Media body>
+                                <p className="small mb-1">Your Rating</p>
+                                <ValidationForm onSubmit={submitForm}>
+                                    <SelectGroup
+                                        name="rating"
+                                        id="rating"
+                                        required
+                                        errorMessage="Please select a rating."
+                                    >
+                                        <option value="">Pleale rate</option>
+                                        <option value="1">1 Star</option>
+                                        <option value="2">2 Star</option>
+                                        <option value="3">3 Star</option>
+                                        <option value="4">4 Star</option>
+                                        <option value="5">5 Star</option>
+                                    </SelectGroup>
+                                    <p className="small my-1">Your Comment</p>
+                                    <TextInput
+                                        name="comments"
+                                        id="comments"
+                                        multiline
+                                        required
+                                        rows="5"
+                                    />
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary mt-2 btn-sm"
+                                    >
+                                        Add Comment
+                                    </button>
+                                </ValidationForm>
+                            </Media>
+                        </Media>
+                    </Col>
+                </Row>
+            )}
+        </>
+    );
+};
+const UserComments = ({ comments }) => {
+    const hasComments = comments.length > 0;
+    RatingCreator({ rating: comments, size: 20 });
+    const AddCommentWithRouterProps = withRouter(AddComment);
+    return (
+        <Row className="mt-5">
+            <Col>
+                <p className="mb-0">Comments</p>
+                <AddCommentWithRouterProps />
+            </Col>
+            {hasComments ? (
+                <>
+                    {comments.map((comment, i) => {
+                        return (
+                            <Col xs="12" className="mt-3 border-bottom" key={i}>
+                                <Media>
+                                    <Media left className="mr-4">
+                                        <img
+                                            src={comment.avatar}
+                                            className="rounded-circle"
+                                            alt=""
+                                            width="50px"
+                                            height="50px"
+                                        />
+                                    </Media>
+                                    <Media body>
+                                        <blockquote className="blockquote">
+                                            <p className="mb-0">
+                                                {comment.comments}
+                                            </p>
+                                            <footer className="blockquote-footer">
+                                                {comment.userName}{' '}
+                                                <cite
+                                                    className="small"
+                                                    title="Source Title"
+                                                >
+                                                    {comment.location.country}{' '}
+                                                    {comment.location.city}
+                                                </cite>
+                                                <p>
+                                                    {RatingCreator({
+                                                        rating: comment.rating,
+                                                        size: 10,
+                                                        color: '#00A799',
+                                                    })}
+                                                </p>
+                                            </footer>
+                                        </blockquote>
+                                    </Media>
+                                </Media>
+                            </Col>
+                        );
+                    })}
+                </>
+            ) : (
+                'No Comments availabe'
+            )}
+        </Row>
+    );
+};
 const PropertyDetails = ({ match }) => {
     const dispatch = useDispatch();
     const [loadingItem, setLoadingItem] = useState(true);
@@ -341,13 +503,16 @@ const PropertyDetails = ({ match }) => {
         }
     }, [hasDetailsPropertyError]);
     return (
-        <div className="mh--50">
+        <div className="mh--50 mb-5">
             {loadingItem ? (
                 <Spinner />
             ) : notFound ? (
                 <NotFound />
             ) : (
-                <PropertyDetailsContainerMemo details={details[0]} />
+                <>
+                    <PropertyDetailsContainerMemo details={details[0]} />
+                    <UserComments comments={details[0].comments} />
+                </>
             )}
         </div>
     );

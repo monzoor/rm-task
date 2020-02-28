@@ -13,10 +13,11 @@ Router.get('/search', PerpertyController.search);
 Router.post('/createProperty', PerpertyController.createProperties);
 Router.post('/createProperty/:image?', PerpertyController.createProperties);
 Router.post('/img/upload', PerpertyController.imageUpload);
+Router.post('/comments/:id', PerpertyController.comments);
 
 Router.get('/deleteAll', PerpertyController.deleteAll);
 
-Router.post('/booking', PerpertyController.booking);
+Router.post('/booking/', PerpertyController.booking);
 
 Router.get('/*', (res, req, next) => {
     throw new ErrorHandler(404, 'Invalid URL');

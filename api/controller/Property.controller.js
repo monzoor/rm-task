@@ -136,6 +136,46 @@ exports.booking = async (req, res, next) => {
         next(e);
     }
 };
+exports.comments = async (req, res, next) => {
+    console.log(req.params, req.body);
+
+    const { id } = req.params;
+    const { location, userName, avatar, rating, comments } = req.body;
+    // return;
+    try {
+        await PropertyModel.findOneAndUpdate(
+            {
+                _id: id,
+            },
+            {
+                $push: {
+                    comments: {
+                        location,
+                        userName,
+                        avatar,
+                        rating,
+                        comments,
+                    },
+                },
+            }
+        )
+            .then(() => {
+                res.status(200).json({
+                    status: 'sucess',
+                    statusCode: 200,
+                    message: 'Sucessfuly booked',
+                });
+            })
+            .catch(() => {
+                if (Object.keys(allpropertiesData).length === 0) {
+                    throw new ErrorHandler(404, 'No Data Found');
+                    next();
+                }
+            });
+    } catch {
+        next(e);
+    }
+};
 exports.createProperties = async (req, res, next) => {
     console.log('-asdasd--', req.body.images);
     if (!req.body) {
