@@ -17,7 +17,7 @@ import staticUserData from '../../Config/staticUserData.js';
 import Icon from '../../Utils/IconUtils';
 import NotFound from '../../Utils/NoContentFound.js';
 import { Spinner } from '../../Utils/Loader';
-import { RatingCreator } from '../../Utils/Utils';
+import { RatingCreator, ratingValuesCreator } from '../../Utils/Utils';
 
 // Custom Hooks
 import useError from '../../CustomHook/ErrorHook';
@@ -29,7 +29,7 @@ import propertyDetailsAction from './_Actions/propertyDetailsAction';
 import DatePicker from '../Common/DatePicker';
 
 const PropertyHeader = ({ title, rating, location }) => {
-    const ratings = RatingCreator({ rating: rating, size: 20 });
+    const ratings = RatingCreator({ rating: rating.ratings, size: 20 });
     return (
         <Row>
             <Col xs="auto" className="pr-0">
@@ -190,7 +190,7 @@ const PropertyDetailsItems = ({
         </>
     );
 };
-const Reserve = ({ price, id, booking, rating, totalReviews }) => {
+const Reserve = ({ price, id, booking, rating }) => {
     const dispatch = useDispatch();
     const [resetDatePicker, setResetDatePicker] = useState(false);
     const [daysCounterValue, setDaysCounterValue] = useState(0);
@@ -240,9 +240,9 @@ const Reserve = ({ price, id, booking, rating, totalReviews }) => {
                 />
                 <p className="small float-left mb-0">
                     <span className="font-weight-bold mt-2">
-                        {isNaN(rating) ? 0 : rating}{' '}
+                        {rating.ratings}{' '}
                     </span>
-                    <span className="text-muted mt-2">{`(${totalReviews} reviews)`}</span>
+                    <span className="text-muted mt-2">{`(${rating.reviews} reviews)`}</span>
                 </p>
                 <div className="clearfix" />
                 <hr />
@@ -286,12 +286,14 @@ const PropertyDetailsContainer = ({ details }) => {
         booking,
     } = details;
 
-    let rating = 0;
-    comments.map(comment => {
-        rating = rating + comment.rating;
-        return rating;
-    });
-    const ratings = parseInt(rating / comments.length, 10);
+    // let rating = 0;
+    // comments.map(comment => {
+    //     rating = rating + comment.rating;
+    //     return rating;
+    // });
+    const ratings = ratingValuesCreator(comments);
+    console.log('----', ratingValuesCreator(comments));
+
     return (
         <>
             <PropertyHeader
@@ -315,7 +317,6 @@ const PropertyDetailsContainer = ({ details }) => {
                         id={_id}
                         price={price}
                         rating={ratings}
-                        totalReviews={comments.length}
                         booking={booking}
                     />
                 </Col>
@@ -473,7 +474,9 @@ const UserComments = ({ comments }) => {
                     })}
                 </>
             ) : (
-                'No Comments availabe'
+                <Col xs="12">
+                    <p>No comments availabe</p>
+                </Col>
             )}
         </Row>
     );

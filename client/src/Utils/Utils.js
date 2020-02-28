@@ -3,6 +3,18 @@ import React from 'react';
 import queryString from 'query-string';
 import Icon from './IconUtils';
 
+const ratingValuesCreator = comments => {
+    let rating = 0;
+    comments.map(comment => {
+        rating = rating + comment.rating;
+        return rating;
+    });
+    const ratings = parseFloat(rating / comments.length, 10);
+    return {
+        ratings: isNaN(ratings) ? 0 : ratings.toFixed(2),
+        reviews: comments.length,
+    };
+};
 const RatingCreator = values => {
     const defaults = {
         rating: 1,
@@ -47,4 +59,4 @@ const qstringCreator = (query, offset = 0) => {
     }
     return stringItems;
 };
-export { qstringCreator, RatingCreator };
+export { qstringCreator, RatingCreator, ratingValuesCreator };

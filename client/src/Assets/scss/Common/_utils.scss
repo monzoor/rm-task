@@ -74,3 +74,8 @@ dd {
     background-position: center;
     height: 170px;
 }
+a {
+    &:hover {
+        text-decoration: none;
+    }
+}

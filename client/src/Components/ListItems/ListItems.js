@@ -7,19 +7,26 @@ import React, {
 } from 'react';
 import { Row, Col } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
-import searchAction from './_Actions/_searchAction';
 import { withRouter } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import queryString from 'query-string';
 
+import searchAction from './_Actions/_searchAction';
+
+import useError from '../../CustomHook/ErrorHook';
+
 import { qstringCreator } from '../../Utils/Utils';
+import { ratingValuesCreator } from '../../Utils/Utils';
+
 import Icon from '../../Utils/IconUtils';
 import NotFound from '../../Utils/NoContentFound.js';
 import history from '../../Utils/history';
-import useError from '../../CustomHook/ErrorHook';
+
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+
 const settings = {
     dots: true,
     infinite: true,
@@ -28,34 +35,43 @@ const settings = {
     slidesToScroll: 1,
     arrows: true,
 };
-const PropertySlider = () => {
+const PropertySlider = ({ images }) => {
     return (
         <Col xs="4">
             <Slider {...settings}>
                 <div>
-                    <img
-                        src="https://picsum.photos/seed/picsum/350/200"
-                        alt=""
+                    <div
+                        className="bg-img"
+                        style={{ backgroundImage: `url(${images[0].url})` }}
                     />
                 </div>
                 <div>
-                    <img src="https://picsum.photos/350/200" alt="" />
+                    <div
+                        className="bg-img"
+                        style={{ backgroundImage: `url(${images[1].url})` }}
+                    />
                 </div>
                 <div>
-                    <img src="https://picsum.photos/id/237/350/200" alt="" />
-                </div>
-                <div>
-                    <img src="https://picsum.photos/350/200" alt="" />
+                    <div
+                        className="bg-img"
+                        style={{ backgroundImage: `url(${images[2].url})` }}
+                    />
                 </div>
             </Slider>
         </Col>
     );
 };
-const PropertyList = () => {
+const PropertyList = ({ type, title, description, price, comments }) => {
+    const priceValue = price.match(/\d+/g)
+        ? parseInt(price.match(/\d+/g).join(''), 10)
+        : 0;
+    const currency = price.replace(/[0-9]/g, '');
+    const ratings = ratingValuesCreator(comments);
+
     return (
-        <Col xs="8">
+        <>
             <dl className="small mb-3">
-                <dt>Primate Room</dt>
+                <dt>{type}</dt>
                 <dd>
                     <Icon
                         className="mr-1"
@@ -63,35 +79,38 @@ const PropertyList = () => {
                         size={10}
                         icon="star"
                     />
-                    4.61 (207)
+                    {`${ratings.ratings}`} {`(${ratings.reviews})`}
                 </dd>
             </dl>
-            <p className="h5">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Assumenda, quam.
+            <p className="h5">{title}</p>
+            <p className="small">{description}</p>
+            <p className="text-right price-position">
+                <span className="h3 text-black">{`${currency}${priceValue}`}</span>
+                / night
             </p>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet
-                distinctio odio dicta qui accusantium veritatis doloremque
-                reiciendis in.
-            </p>
-            <p className="text-right">
-                <span className="h3 text-black">$28</span>/ night
-            </p>
-        </Col>
+        </>
     );
 };
 
 const PropertyListItems = ({ properties }) => {
-    // console.dir(properties);
-
+    console.log('---', properties);
     return (
         <>
             {properties.map(property => {
                 return (
                     <Row key={property._id} className="border-bottom pb-3 mb-3">
-                        <PropertySlider />
-                        <PropertyList />
+                        <PropertySlider images={property.image} />
+                        <Col xs="8" className="position-relative">
+                            <Link to={`/details/${property._id}`}>
+                                <PropertyList
+                                    type={property.type}
+                                    title={property.title}
+                                    comments={property.comments}
+                                    description={property.description}
+                                    price={property.price}
+                                />
+                            </Link>
+                        </Col>
                     </Row>
                 );
             })}
@@ -160,24 +179,10 @@ const PropertiesList = props => {
     }, [hasPropertiesListError]);
 
     const handlePageClick = data => {
-        console.log('-----', paginationInfo.currentPage);
-
         const selected = data.selected;
         const offset = Math.ceil(selected * paginationInfo.limit);
-
-        console.log(
-            '----',
-            Math.ceil(selected * paginationInfo.limit),
-            selected,
-            paginationInfo.limit,
-            qstringCreator(search, offset + 1)
-        );
         history.push(`/list?${qstringCreator(search, offset + 1)}`);
-        // this.setState({ offset: offset }, () => {
-        //     this.loadCommentsFromServer();
-        // });
     };
-    // console.log('---', parseInt(queryString.parse(search).page, 10) - 1);
 
     return (
         <Row>
@@ -189,20 +194,22 @@ const PropertiesList = props => {
                 ) : (
                     <>
                         <PropertyListItems properties={propertiesList} />
-                        <ReactPaginate
-                            forcePage={isNaN(currentPage) ? 0 : currentPage}
-                            previousLabel={'<'}
-                            nextLabel={'>'}
-                            breakLabel={'...'}
-                            breakClassName={'break-me'}
-                            pageCount={paginationInfo.totalPages}
-                            marginPagesDisplayed={2}
-                            pageRangeDisplayed={5}
-                            onPageChange={handlePageClick}
-                            containerClassName={'pagination'}
-                            subContainerClassName={'pages pagination'}
-                            activeClassName={'active'}
-                        />
+                        {paginationInfo.totalPage > 1 && (
+                            <ReactPaginate
+                                forcePage={isNaN(currentPage) ? 0 : currentPage}
+                                previousLabel={'<'}
+                                nextLabel={'>'}
+                                breakLabel={'...'}
+                                breakClassName={'break-me'}
+                                pageCount={paginationInfo.totalPages}
+                                marginPagesDisplayed={2}
+                                pageRangeDisplayed={5}
+                                onPageChange={handlePageClick}
+                                containerClassName={'pagination'}
+                                subContainerClassName={'pages pagination'}
+                                activeClassName={'active'}
+                            />
+                        )}
                     </>
                 )}
             </Col>
