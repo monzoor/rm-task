@@ -5,6 +5,7 @@ const initialState = {
 };
 
 export default function(state = initialState, action) {
+    // console.log('----', state);
     switch (action.type) {
         case 'PROPERTIES_LIST': {
             return {
@@ -12,6 +13,13 @@ export default function(state = initialState, action) {
                 loading: false,
                 propertiesList: action.data,
                 paginationInfo: action.paginationInfo,
+            };
+        }
+        case 'CLEAR_PROPERTIES_LIST': {
+            return {
+                loading: true,
+                propertiesList: [],
+                paginationInfo: {},
             };
         }
 

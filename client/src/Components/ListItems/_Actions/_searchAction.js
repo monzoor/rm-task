@@ -1,11 +1,24 @@
 import axios from 'axios';
 
+import { qstringCreator } from '../../../Utils/Utils';
 import ErrorDispatch from '../../../ErrorHandler/ErrorDispatcher';
 
-const searchAction = query => {
+const searchAction = (query, clearAll) => {
+    const searchString = qstringCreator(query);
+
     return dispatch => {
+        if (clearAll) {
+            dispatch({
+                type: 'CLEAR_PROPERTIES_LIST',
+            });
+        }
+
         return axios
-            .get(`/api/search?${query}`)
+            .get(
+                `${
+                    searchString ? `/api/search?${searchString}` : '/api/search'
+                }`
+            )
             .then(response => {
                 dispatch({
                     type: 'PROPERTIES_LIST',

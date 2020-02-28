@@ -198,7 +198,6 @@ const Search = props => {
                                     name="location"
                                     value={formDatas.location}
                                     id="searchText"
-                                    required
                                     prepend={
                                         <span className="input-group-text border-0">
                                             <Icon

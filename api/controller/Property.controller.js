@@ -2,10 +2,6 @@ const PropertyModel = require('../model/Property.model');
 const { ErrorHandler } = require('../utils/errorHandle');
 const multer = require('multer');
 
-let options = {
-    page: 1,
-    limit: 10,
-};
 exports.deleteAll = async (req, res, next) => {
     try {
         await PropertyModel.remove({});
@@ -21,7 +17,11 @@ exports.deleteAll = async (req, res, next) => {
 
 exports.search = async (req, res, next) => {
     try {
-        console.log('=====', req.query.location);
+        const options = {
+            page: req.query.page || 1,
+            limit: req.query.limit || 10,
+        };
+        // console.log('=====', req.query);
 
         allpropertiesData = await PropertyModel.paginate(
             {
@@ -37,12 +37,22 @@ exports.search = async (req, res, next) => {
             },
             options
         );
+        // console.log('----', allpropertiesData);
+
         const dataPrep = {
             data: allpropertiesData.docs,
             paginationInfo: {
                 totalPages: allpropertiesData.totalPages,
+                limit: allpropertiesData.limit,
+                prevPage: allpropertiesData.prevPage,
+                nextPage: allpropertiesData.nextPage,
+                currentPage: allpropertiesData.page,
             },
         };
+        if (allpropertiesData.docs.length === 0) {
+            throw new ErrorHandler(404, 'No Data Found');
+            next();
+        }
         res.json(dataPrep);
     } catch (e) {
         next(e);
@@ -50,6 +60,10 @@ exports.search = async (req, res, next) => {
 };
 exports.allProperties = async (req, res, next) => {
     try {
+        let options = {
+            page: 1,
+            limit: 10,
+        };
         let allpropertiesData = {};
         if (req.params.itemType === 'priority') {
             allpropertiesData = await PropertyModel.paginate(
