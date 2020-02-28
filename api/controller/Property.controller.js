@@ -1,6 +1,7 @@
 const PropertyModel = require('../model/Property.model');
 const { ErrorHandler } = require('../utils/errorHandle');
 const multer = require('multer');
+const moment = require('moment');
 
 exports.deleteAll = async (req, res, next) => {
     try {
@@ -16,12 +17,13 @@ exports.deleteAll = async (req, res, next) => {
 };
 
 exports.search = async (req, res, next) => {
+    console.log('---', req.query);
+
     try {
         const options = {
             page: req.query.page || 1,
             limit: req.query.limit || 10,
         };
-        // console.log('=====', req.query);
 
         allpropertiesData = await PropertyModel.paginate(
             {
@@ -34,6 +36,18 @@ exports.search = async (req, res, next) => {
                     },
                     { 'location.city': new RegExp(req.query.location, 'gi') },
                 ],
+                booking: {
+                    $not: {
+                        $elemMatch: {
+                            startDate: {
+                                $gt: req.query.startDate,
+                            },
+                            endDate: {
+                                $lt: req.query.endDate,
+                            },
+                        },
+                    },
+                },
             },
             options
         );

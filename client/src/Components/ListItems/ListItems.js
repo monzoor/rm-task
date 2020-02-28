@@ -93,7 +93,6 @@ const PropertyList = ({ type, title, description, price, comments }) => {
 };
 
 const PropertyListItems = ({ properties }) => {
-    console.log('---', properties);
     return (
         <>
             {properties.map(property => {

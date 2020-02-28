@@ -18,7 +18,7 @@ const enumerateDaysBetweenDates = (startDate, endDate) => {
 };
 const DatePicker = ({ dateRange, reserve, booking }) => {
     const detePickerItems = {
-        dateFormat: 'DD-MM-YYYY',
+        dateFormat: 'DD/MM/YYYY',
         small: false,
         block: false,
         orientation: 'horizontal',

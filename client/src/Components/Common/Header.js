@@ -15,6 +15,7 @@ import {
 } from 'react-bootstrap4-form-validation';
 import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
+import moment from 'moment';
 
 // Utils
 import history from '../../Utils/history';
@@ -164,6 +165,18 @@ const Search = props => {
                 : ''
             : '',
     });
+    const [dateRanges, setDateRanges] = useState({
+        startDate: Object.keys(queryStringDatas)
+            ? queryStringDatas.startDate
+                ? queryStringDatas.startDate
+                : ''
+            : '',
+        endDate: Object.keys(queryStringDatas)
+            ? queryStringDatas.endDate
+                ? queryStringDatas.endDate
+                : ''
+            : '',
+    });
     const handleChange = e => {
         setFormDatas({
             ...formDatas,
@@ -172,19 +185,35 @@ const Search = props => {
     };
     const SearchSubmit = (e, formData) => {
         e.preventDefault();
-        history.push(`/list?location=${formData.location}`);
+        if (!formData.location && !dateRanges.startDate && !dateRanges.endDate)
+            return;
+        const locationSearchString = formData.location
+            ? `location=${formData.location}`
+            : '';
+        const startDateString = dateRanges.startDate
+            ? `startDate=${moment(dateRanges.startDate).format('DD-MM-YYYY')}`
+            : '';
+        const endDateString = dateRanges.endDate
+            ? `endDate=${moment(dateRanges.endDate).format('DD-MM-YYYY')}`
+            : '';
+        const searchString = `${
+            locationSearchString ? locationSearchString : ''
+        }${
+            locationSearchString && startDateString && endDateString ? '&' : ''
+        }${
+            startDateString && endDateString
+                ? `${startDateString}&${endDateString}`
+                : ''
+        }`;
+
+        history.push(`/list?${searchString}`);
     };
 
     const dateRange = ({ startDate, endDate }) => {
-        console.log(startDate, endDate);
-
-        // setResetDatePicker(false);
-        // const days = moment(endDate).diff(moment(startDate), 'days');
-        // setDaysCounterValue(days);
-        // setDateRanges({
-        //     startDate,
-        //     endDate,
-        // });
+        setDateRanges({
+            startDate,
+            endDate,
+        });
     };
 
     return (
