@@ -40,6 +40,56 @@ const StaticHeader = () => {
     );
 };
 
+const Comments = ({ comments }) => {
+    return (
+        <>
+            {comments.map(comment => {
+                const ratings = [];
+                for (let i = 1; i <= comment.rating; i++) {
+                    ratings.push(
+                        <Icon
+                            key={i}
+                            className="mr-2"
+                            color="#03848a"
+                            size={15}
+                            icon="star"
+                        />
+                    );
+                }
+                return (
+                    <React.Fragment key={comment._id}>
+                        <div className="rating my-2">{ratings}</div>
+                        <p className="descriptions small">{comment.comments}</p>
+                        <Media>
+                            <img
+                                src={comment.avatar}
+                                className="rounded-circle"
+                                alt=""
+                                width="50px"
+                                height="50px"
+                            />
+                            <Media body className="ml-2 text-muted">
+                                <p className="mb-0">{comment.userName}</p>
+                                <p className="small">
+                                    {comment.location.country}
+                                </p>
+                            </Media>
+                        </Media>
+                    </React.Fragment>
+                );
+            })}
+        </>
+    );
+};
+const HeadersForProperty = ({ title, location }) => {
+    const { country, city } = location;
+    return (
+        <>
+            <p className="h5 mb-1 mt-2">{title}</p>
+            <p className="small">{`${country}, ${city}`}</p>
+        </>
+    );
+};
 const FeatureItems = ({ properties }) => {
     return (
         <Row>
@@ -47,55 +97,20 @@ const FeatureItems = ({ properties }) => {
                 return (
                     <Col xs="4" className="mb-4" key={property._id}>
                         <Link to={`/details/${property._id}`}>
-                            <img
-                                src={property.image[0].url}
-                                className="img-fluid border-rounded"
-                                alt=""
+                            <div
+                                style={{
+                                    backgroundImage: `url(${property.image[0].url})`,
+                                }}
+                                className="bg-img"
                             />
-                            {property.comments.map(comment => {
-                                const ratings = [];
-                                for (let i = 1; i <= comment.rating; i++) {
-                                    ratings.push(
-                                        <Icon
-                                            key={i}
-                                            className="mr-2"
-                                            color="#03848a"
-                                            size={15}
-                                            icon="star"
-                                        />
-                                    );
-                                }
-                                return (
-                                    <React.Fragment key={comment._id}>
-                                        <div className="rating my-2">
-                                            {ratings}
-                                        </div>
-                                        <p className="descriptions small">
-                                            {comment.comments}
-                                        </p>
-                                        <Media>
-                                            <img
-                                                src={comment.avatar}
-                                                className="rounded-circle"
-                                                alt=""
-                                                width="50px"
-                                                height="50px"
-                                            />
-                                            <Media
-                                                body
-                                                className="ml-2 text-muted"
-                                            >
-                                                <p className="mb-0">
-                                                    {comment.userName}
-                                                </p>
-                                                <p className="small">
-                                                    {comment.location.country}
-                                                </p>
-                                            </Media>
-                                        </Media>
-                                    </React.Fragment>
-                                );
-                            })}
+                            {property.comments.length ? (
+                                <Comments comments={property.comments} />
+                            ) : (
+                                <HeadersForProperty
+                                    title={property.title}
+                                    location={property.location}
+                                />
+                            )}
                         </Link>
                     </Col>
                 );

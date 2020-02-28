@@ -137,7 +137,7 @@ exports.booking = async (req, res, next) => {
     }
 };
 exports.createProperties = async (req, res, next) => {
-    console.log('-asdasd--', req.body);
+    console.log('-asdasd--', req.body.images);
     if (!req.body) {
         throw new ErrorHandler(400, 'Please fill all required field');
     }
@@ -157,19 +157,19 @@ exports.createProperties = async (req, res, next) => {
                 'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
         },
         image: req.body.images,
-        comments: [
-            {
-                userName: 'Wasiq',
-                avatar:
-                    'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
-                rating: 5,
-                comments: 'We hated your smelly shitty house',
-                location: {
-                    country: 'Bangladesh',
-                    city: 'Dhaka',
-                },
-            },
-        ],
+        // comments: [
+        //     {
+        //         userName: 'Wasiq',
+        //         avatar:
+        //             'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
+        //         rating: 5,
+        //         comments: 'We hated your smelly shitty house',
+        //         location: {
+        //             country: 'Bangladesh',
+        //             city: 'Dhaka',
+        //         },
+        //     },
+        // ],
     });
     try {
         await newProperty
