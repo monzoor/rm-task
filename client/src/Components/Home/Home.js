@@ -41,43 +41,49 @@ const StaticHeader = () => {
 };
 
 const Comments = ({ comments }) => {
+    const maxRatingValue = Math.max.apply(
+        Math,
+        comments.map(o => {
+            return o.rating;
+        })
+    );
+    const maxRatingComments = comments.filter(item => {
+        return item.rating === maxRatingValue;
+    });
+    const ratingsStar = [];
+    for (let i = 1; i <= maxRatingValue; i++) {
+        ratingsStar.push(
+            <Icon
+                key={i}
+                className="mr-2"
+                color="#03848a"
+                size={15}
+                icon="star"
+            />
+        );
+    }
+
     return (
         <>
-            {comments.map(comment => {
-                const ratings = [];
-                for (let i = 1; i <= comment.rating; i++) {
-                    ratings.push(
-                        <Icon
-                            key={i}
-                            className="mr-2"
-                            color="#03848a"
-                            size={15}
-                            icon="star"
-                        />
-                    );
-                }
-                return (
-                    <React.Fragment key={comment._id}>
-                        <div className="rating my-2">{ratings}</div>
-                        <p className="descriptions small">{comment.comments}</p>
-                        <Media>
-                            <img
-                                src={comment.avatar}
-                                className="rounded-circle"
-                                alt=""
-                                width="50px"
-                                height="50px"
-                            />
-                            <Media body className="ml-2 text-muted">
-                                <p className="mb-0">{comment.userName}</p>
-                                <p className="small">
-                                    {comment.location.country}
-                                </p>
-                            </Media>
-                        </Media>
-                    </React.Fragment>
-                );
-            })}
+            <div className="rating my-2">{ratingsStar}</div>
+            <p className="descriptions small">
+                {maxRatingComments[0].comments}
+            </p>
+            <Media>
+                <img
+                    src={maxRatingComments[0].avatar}
+                    className="rounded-circle"
+                    alt=""
+                    width="50px"
+                    height="50px"
+                />
+                <Media body className="ml-2 text-muted">
+                    <p className="mb-0">{maxRatingComments[0].userName}</p>
+                    <p className="small">
+                        {maxRatingComments[0].location.country}
+                    </p>
+                </Media>
+            </Media>
         </>
     );
 };

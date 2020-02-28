@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import 'react-dates/initialize';
-import {
-    DateRangePicker,
-    // SingleDatePicker,
-    // DayPickerRangeController,
-} from 'react-dates';
+import { DateRangePicker } from 'react-dates';
 
 import moment from 'moment';
 
-import '../../../node_modules/react-dates/lib/css/_datepicker.css';
+import 'react-dates/lib/css/_datepicker.css';
+
 const enumerateDaysBetweenDates = (startDate, endDate) => {
     var now = startDate.clone(),
         dates = [];
@@ -21,7 +18,7 @@ const enumerateDaysBetweenDates = (startDate, endDate) => {
 };
 const DatePicker = ({ dateRange, reserve, booking }) => {
     const detePickerItems = {
-        dateFormat: 'DD/MM/YYYY',
+        dateFormat: 'DD-MM-YYYY',
         small: false,
         block: false,
         orientation: 'horizontal',
@@ -62,12 +59,10 @@ const DatePicker = ({ dateRange, reserve, booking }) => {
         return blockedDates;
     };
     const onClose = dates => {
-        if (reserve && dates.endDate && dates.startDate) {
-            dateRange({
-                startDate: new Date(dates.startDate),
-                endDate: new Date(dates.endDate),
-            });
-        }
+        dateRange({
+            startDate: new Date(dates.startDate),
+            endDate: new Date(dates.endDate),
+        });
     };
 
     return (

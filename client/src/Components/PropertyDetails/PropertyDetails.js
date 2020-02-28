@@ -285,14 +285,7 @@ const PropertyDetailsContainer = ({ details }) => {
         price,
         booking,
     } = details;
-
-    // let rating = 0;
-    // comments.map(comment => {
-    //     rating = rating + comment.rating;
-    //     return rating;
-    // });
     const ratings = ratingValuesCreator(comments);
-    console.log('----', ratingValuesCreator(comments));
 
     return (
         <>

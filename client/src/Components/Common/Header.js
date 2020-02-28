@@ -15,17 +15,18 @@ import {
 } from 'react-bootstrap4-form-validation';
 import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
-import history from '../../Utils/history';
 
+// Utils
+import history from '../../Utils/history';
 import Icon from '../../Utils/IconUtils';
+
+// Component
 import Date from './DatePicker';
 
-// import searchAction from './_Actions/_searchAction';
-
-const subTest = () => {
-    console.log('---');
-};
 const HeaderSearchBox = () => {
+    const subTest = () => {
+        console.log('---');
+    };
     return (
         <Nav className="mr-auto">
             <NavItem>
@@ -34,9 +35,7 @@ const HeaderSearchBox = () => {
                         <Col xs="3" className="pr-0">
                             <FormGroup className="location shadow-sm">
                                 <TextInputGroup
-                                    // className="border-right-0"
                                     name="name"
-                                    // value={formDatas.name}
                                     id="searchTop"
                                     minLength="4"
                                     required
@@ -157,7 +156,6 @@ const SecendaryStaticNav = () => {
     );
 };
 const Search = props => {
-    // console.log('----', queryString.parse(props.location.search));
     const queryStringDatas = queryString.parse(props.location.search);
     const [formDatas, setFormDatas] = useState({
         location: Object.keys(queryStringDatas)
@@ -175,7 +173,18 @@ const Search = props => {
     const SearchSubmit = (e, formData) => {
         e.preventDefault();
         history.push(`/list?location=${formData.location}`);
-        // dispatch(searchAction(`location=${formData.location}`));
+    };
+
+    const dateRange = ({ startDate, endDate }) => {
+        console.log(startDate, endDate);
+
+        // setResetDatePicker(false);
+        // const days = moment(endDate).diff(moment(startDate), 'days');
+        // setDaysCounterValue(days);
+        // setDateRanges({
+        //     startDate,
+        //     endDate,
+        // });
     };
 
     return (
@@ -213,7 +222,7 @@ const Search = props => {
                         </Col>
                         <Col className="px-0 border">
                             <FormGroup className="location main-datepicker">
-                                <Date />
+                                <Date dateRange={dateRange} />
                             </FormGroup>
                         </Col>
                         <Col className="px-0 border person">
