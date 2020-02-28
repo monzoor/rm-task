@@ -177,7 +177,7 @@ exports.comments = async (req, res, next) => {
     }
 };
 exports.createProperties = async (req, res, next) => {
-    console.log('-asdasd--', req.body.images);
+    console.log('-asdasd--', req.body);
     if (!req.body) {
         throw new ErrorHandler(400, 'Please fill all required field');
     }

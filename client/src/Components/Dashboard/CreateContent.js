@@ -13,6 +13,7 @@ import {
     ValidationForm,
     TextInputGroup,
     TextInput,
+    SelectGroup,
 } from 'react-bootstrap4-form-validation';
 import { post } from 'axios';
 import { useDropzone } from 'react-dropzone';
@@ -131,6 +132,8 @@ const CreateContent = () => {
         country: '',
         City: '',
         images: [],
+        type: '',
+        currency: '',
     });
 
     const fileUploaded = filesUrls => {
@@ -150,6 +153,7 @@ const CreateContent = () => {
     };
     const subTest = async (e, formData) => {
         e.preventDefault();
+
         if (uploadedImageData.length === 0 && uploadedImageData.length < 4) {
             setImageUploadValidation('Please Upload image');
             return;
@@ -158,6 +162,7 @@ const CreateContent = () => {
         const allFormData = {
             ...formData,
             images: uploadedImageData,
+            price: `${formData.currency}${formData.price}`,
         };
         setLoadingData(true);
         try {
@@ -205,25 +210,67 @@ const CreateContent = () => {
                                 multiline
                                 minLength="4"
                                 rows="5"
-                                placeholder="Anywhere"
+                                placeholder="Description"
                                 onChange={handleChange}
                             />
                         </FormGroup>
-                        <FormGroup className="col-4">
+                        <FormGroup className="col-6">
+                            <label htmlFor="type">Select type</label>
+                            <SelectGroup
+                                name="type"
+                                id="type"
+                                value={formDatas.type}
+                                required
+                                errorMessage="Please select a type."
+                                onChange={handleChange}
+                            >
+                                <option value="">Select Type</option>
+                                <option value="Private room in flat">
+                                    Private room in flat
+                                </option>
+                                <option value="Delux room in hotel">
+                                    Delux room in hotel
+                                </option>
+                                <option value="Single room in a flat">
+                                    Single room in a flat
+                                </option>
+                            </SelectGroup>
+                        </FormGroup>
+                        <FormGroup className="col-6">
                             <label htmlFor="price">
                                 Price <sup className="text-danger small">*</sup>
                             </label>
                             <TextInputGroup
                                 id="price"
                                 name="price"
+                                type="number"
                                 value={formDatas.name}
                                 required
                                 minLength="1"
-                                placeholder="Anywhere"
+                                placeholder="Amount"
                                 onChange={handleChange}
+                                prepend={
+                                    <span className="input-group-text p-0 border-0">
+                                        <SelectGroup
+                                            name="currency"
+                                            id="currency"
+                                            value={formDatas.currency}
+                                            required
+                                            errorMessage="Please select a type."
+                                            onChange={handleChange}
+                                        >
+                                            <option defaultValue value="$">
+                                                $
+                                            </option>
+                                            <option value="€">€</option>
+                                            <option value="৳">৳</option>
+                                            <option value="¥">¥</option>
+                                        </SelectGroup>
+                                    </span>
+                                }
                             />
                         </FormGroup>
-                        <FormGroup className="col-4">
+                        <FormGroup className="col-6">
                             <label htmlFor="country">
                                 Country{' '}
                                 <sup className="text-danger small">*</sup>
@@ -234,11 +281,11 @@ const CreateContent = () => {
                                 minLength="2"
                                 value={formDatas.name}
                                 required
-                                placeholder="Anywhere"
+                                placeholder="Country"
                                 onChange={handleChange}
                             />
                         </FormGroup>
-                        <FormGroup className="col-4">
+                        <FormGroup className="col-6">
                             <label htmlFor="city">
                                 City <sup className="text-danger small">*</sup>
                             </label>
@@ -248,7 +295,7 @@ const CreateContent = () => {
                                 name="city"
                                 value={formDatas.name}
                                 required
-                                placeholder="Anywhere"
+                                placeholder="City"
                                 onChange={handleChange}
                             />
                         </FormGroup>

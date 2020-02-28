@@ -126,7 +126,7 @@ const PropertyDetailsItems = ({
                     <Icon className="mr-2" color="#000" size={12} icon="home" />
                 </Media>
                 <Media body>
-                    <p className="mb-0">{`${type} room in flat`}</p>
+                    <p className="mb-0">{type}</p>
                     <span className="text-muted font-weight-light">
                         <span className="mr-3">2 guests</span>
                         <span className="mr-3">1 bedroom</span>
@@ -239,7 +239,9 @@ const Reserve = ({ price, id, booking, rating, totalReviews }) => {
                     icon="star"
                 />
                 <p className="small float-left mb-0">
-                    <span className="font-weight-bold mt-2">{rating} </span>
+                    <span className="font-weight-bold mt-2">
+                        {isNaN(rating) ? 0 : rating}{' '}
+                    </span>
                     <span className="text-muted mt-2">{`(${totalReviews} reviews)`}</span>
                 </p>
                 <div className="clearfix" />
