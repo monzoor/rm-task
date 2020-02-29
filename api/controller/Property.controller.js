@@ -11,14 +11,11 @@ exports.deleteAll = async (req, res, next) => {
             message: 'deleted all',
         });
     } catch (e) {
-        console.error(e);
         next(e);
     }
 };
 
 exports.search = async (req, res, next) => {
-    console.log('---', req.query);
-
     try {
         const options = {
             page: req.query.page || 1,
@@ -65,7 +62,6 @@ exports.search = async (req, res, next) => {
         };
         if (allpropertiesData.docs.length === 0) {
             throw new ErrorHandler(404, 'No Data Found');
-            next();
         }
         res.json(dataPrep);
     } catch (e) {
@@ -121,7 +117,7 @@ exports.booking = async (req, res, next) => {
     try {
         const { booking } = req.body;
         const { id } = req.params;
-        await PropertyModel.findOneAndUpdate(
+        await PropertyModel.findByIdAndUpdate(
             {
                 _id: id,
             },
@@ -154,40 +150,37 @@ exports.booking = async (req, res, next) => {
     }
 };
 exports.comments = async (req, res, next) => {
-    console.log(req.params, req.body);
-
     const { id } = req.params;
-    const { location, userName, avatar, rating, comments } = req.body;
-    // return;
+    const { user, rating, comments } = req.body;
+
     try {
-        await PropertyModel.findOneAndUpdate(
+        await PropertyModel.findByIdAndUpdate(
             {
                 _id: id,
             },
             {
                 $push: {
                     comments: {
-                        location,
-                        userName,
-                        avatar,
+                        user: req.body.user,
                         rating,
                         comments,
                     },
                 },
             }
         )
-            .then(() => {
-                res.status(200).json({
-                    status: 'sucess',
-                    statusCode: 200,
-                    message: 'Sucessfuly booked',
-                });
-            })
-            .catch(() => {
-                if (Object.keys(allpropertiesData).length === 0) {
-                    throw new ErrorHandler(404, 'No Data Found');
-                    next();
+            .then(response => {
+                if (response) {
+                    res.status(200).json({
+                        status: 'sucess',
+                        statusCode: 200,
+                        message: 'Sucessfuly comment added',
+                    });
+                } else {
+                    throw new ErrorHandler(404, 'No property found');
                 }
+            })
+            .catch(e => {
+                next(e);
             });
     } catch {
         next(e);

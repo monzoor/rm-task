@@ -31,14 +31,17 @@ const propertySchema = new mongoose.Schema({
     ],
     comments: [
         {
-            userName: String,
-            avatar: String,
+            user: {
+                id: Number,
+                name: String,
+                avatar: String,
+                location: {
+                    country: String,
+                    city: String,
+                },
+            },
             rating: Number,
             comments: String,
-            location: {
-                country: String,
-                city: String,
-            },
         },
     ],
     image: [

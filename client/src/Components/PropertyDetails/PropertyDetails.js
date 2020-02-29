@@ -335,10 +335,7 @@ const AddComment = props => {
     const submitForm = async (e, formData) => {
         e.preventDefault();
         const data = {
-            location: randomUser.location,
-            userName: randomUser.name,
-            avatar: randomUser.avatar,
-            rating: parseInt(formData.rating, 10),
+            user: randomUser,
             comments: formData.comments,
         };
 
