@@ -71,20 +71,17 @@ const DropZoneImage = ({
                     })
                 )
             );
-            // Do something with the files
             const data = new FormData();
             for (let i = 0; i < acceptedFiles.length; i += 1) {
                 data.append('file', acceptedFiles[i]);
             }
             post('/api/img/upload', data)
                 .then(response => {
-                    // console.log('-----s', response);
                     fileUploaded(response.data);
                     setUploadingFile(false);
                 })
                 .catch(error => {
                     setUploadingFile(false);
-                    console.log('====e====', error);
                 });
         },
         [fileUploaded, errorFromImageUpload, uploadedImageData]

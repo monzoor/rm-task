@@ -223,9 +223,7 @@ const Reserve = ({ price, id, booking, rating }) => {
             await post(`/api/booking/${id}`, data);
             dispatch(propertyDetailsAction(id));
             setResetDatePicker(true);
-        } catch (error) {
-            console.log('---', error);
-        }
+        } catch (error) {}
     };
     return (
         <Row className="border p-3">

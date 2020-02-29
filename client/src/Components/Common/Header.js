@@ -25,9 +25,7 @@ import Icon from '../../Utils/IconUtils';
 import Date from './DatePicker';
 
 const HeaderSearchBox = () => {
-    const subTest = () => {
-        console.log('---');
-    };
+    const subTest = () => {};
     return (
         <Nav className="mr-auto">
             <NavItem>
