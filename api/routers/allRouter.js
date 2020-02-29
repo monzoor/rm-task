@@ -17,7 +17,7 @@ Router.post('/comments/:id', PerpertyController.comments);
 
 Router.get('/deleteAll', PerpertyController.deleteAll);
 
-Router.post('/booking/', PerpertyController.booking);
+Router.post('/booking/:id', PerpertyController.booking);
 
 Router.get('/*', (res, req, next) => {
     throw new ErrorHandler(404, 'Invalid URL');

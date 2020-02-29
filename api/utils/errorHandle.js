@@ -9,8 +9,7 @@ class ErrorHandler extends Error {
 const handleError = (err, res) => {
     const { statusCode, message } = err;
     if (!statusCode) {
-        console.log('Error', err);
-        res.status(statusCode).json({
+        res.status(500).json({
             status: 'error',
             statusCode: 500,
             message: 'Somethig went wrong',

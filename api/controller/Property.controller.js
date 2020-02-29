@@ -118,8 +118,9 @@ exports.allProperties = async (req, res, next) => {
 };
 
 exports.booking = async (req, res, next) => {
-    const { id, booking } = req.body;
     try {
+        const { booking } = req.body;
+        const { id } = req.params;
         await PropertyModel.findOneAndUpdate(
             {
                 _id: id,
@@ -127,26 +128,28 @@ exports.booking = async (req, res, next) => {
             {
                 $push: {
                     booking: {
+                        user: booking.user,
                         startDate: booking.startDate,
                         endDate: booking.endDate,
                     },
                 },
             }
         )
-            .then(() => {
-                res.status(200).json({
-                    status: 'sucess',
-                    statusCode: 200,
-                    message: 'Sucessfuly booked',
-                });
-            })
-            .catch(() => {
-                if (Object.keys(allpropertiesData).length === 0) {
-                    throw new ErrorHandler(404, 'No Data Found');
-                    next();
+            .then(response => {
+                if (response) {
+                    res.status(200).json({
+                        status: 'sucess',
+                        statusCode: 200,
+                        message: 'Sucessfuly booked',
+                    });
+                } else {
+                    throw new ErrorHandler(404, 'No property found');
                 }
+            })
+            .catch(e => {
+                next(e);
             });
-    } catch {
+    } catch (e) {
         next(e);
     }
 };
@@ -211,19 +214,6 @@ exports.createProperties = async (req, res, next) => {
                 'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
         },
         image: req.body.images,
-        // comments: [
-        //     {
-        //         userName: 'Wasiq',
-        //         avatar:
-        //             'https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png',
-        //         rating: 5,
-        //         comments: 'We hated your smelly shitty house',
-        //         location: {
-        //             country: 'Bangladesh',
-        //             city: 'Dhaka',
-        //         },
-        //     },
-        // ],
     });
     try {
         await newProperty
@@ -239,7 +229,6 @@ exports.createProperties = async (req, res, next) => {
                 throw new ErrorHandler(400, 'Property not created');
             });
     } catch (e) {
-        console.error(e);
         next(e);
     }
 };

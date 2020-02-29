@@ -31,50 +31,56 @@
         3. Search Button :heavy_check_mark:
 
     2. Funtionality
-        1. Will able to write location
-        2. Wil able to pick date range from datepicker
-        3. Show search string in url
+        1. Will able to write location :heavy_check_mark:
+        2. Wil able to pick date range from datepicker :heavy_check_mark:
+        3. Show search string in url :heavy_check_mark:
 
 3. Listing page
 
     1. Design
 
-        1. List of all properties
-        2. Property Image slider on listing
-        3. Property title, description, rating, price
-        4. Pagination
+        1. List of all properties :heavy_check_mark:
+        2. Property Image slider on listing :heavy_check_mark:
+        3. Property title, description, rating, price :heavy_check_mark:
+        4. Pagination :heavy_check_mark:
 
     2. Funtionality
-        1. Initally show all property listing
-        2. Show pagination for the listing
-        3. Navigate the pagintion
-        4. Show search list with pagination
-        5. Show content if there is no property
+        1. Initally show all property listing :heavy_check_mark:
+        2. Show pagination for the listing :heavy_check_mark:
+        3. Navigate the pagintion :heavy_check_mark:
+        4. Show search list with pagination :heavy_check_mark:
+        5. Show content if there is no property :heavy_check_mark:
 
 4. Details page
 
     1. Design
-        1. Property Image
-        2. Property Title, type, rating, description
-        3. Reserve
-        4. Comments and add comments section
+        1. Property Image :heavy_check_mark:
+        2. Property Title, type, rating, description :heavy_check_mark:
+        3. Reserve :heavy_check_mark:
+        4. Comments and add comments section :heavy_check_mark:
     2. Funtionality
-        1. Show property title, description, rating, review, images
-        2. Date pick to book property
-        3. Show already booked property
-        4. Show comments
-        5. Add comments
-        6. Show average rating
+        1. Show property title, description, rating, review, images :heavy_check_mark:
+        2. Date pick to book property :heavy_check_mark:
+        3. Show already booked property :heavy_check_mark:
+        4. Show comments :heavy_check_mark:
+        5. Add comments :heavy_check_mark:
+        6. Show average rating :heavy_check_mark:
 
 5. Create page
+
     1. Desing
-        1. Title, description, price, type input fields
-        2. Image uploader
-        3. Image preview
+        1. Title, description, price, type input fields :heavy_check_mark:
+        2. Image uploader :heavy_check_mark:
+        3. Image preview :heavy_check_mark:
     2. Funtionality
-        1. Add input datas
-        2. Validation
-        3. Image upload for property
+        1. Add input datas :heavy_check_mark:
+        2. Validation :heavy_check_mark:
+        3. Image upload for property :heavy_check_mark:
+
+6. Api Building
+    1. Create docker container :heavy_check_mark:
+    2. Create Database with mongodb :heavy_check_mark:
+    3. Used CRUD application :heavy_check_mark:
 
 ### Start project
 

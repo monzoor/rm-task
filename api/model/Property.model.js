@@ -16,6 +16,15 @@ const propertySchema = new mongoose.Schema({
     },
     booking: [
         {
+            user: {
+                id: Number,
+                name: String,
+                avatar: String,
+                location: {
+                    country: String,
+                    city: String,
+                },
+            },
             startDate: Date,
             endDate: Date,
         },

@@ -28,6 +28,8 @@ import propertyDetailsAction from './_Actions/propertyDetailsAction';
 // Component
 import DatePicker from '../Common/DatePicker';
 
+const randomUser = staticUserData[Math.floor(Math.random() * 3)];
+
 const PropertyHeader = ({ title, rating, location }) => {
     const ratings = RatingCreator({ rating: rating.ratings, size: 20 });
     return (
@@ -214,11 +216,11 @@ const Reserve = ({ price, id, booking, rating }) => {
     };
     const reserve = async () => {
         const data = {
-            id,
             booking: dateRanges,
+            user: randomUser,
         };
         try {
-            await post('/api/booking', data);
+            await post(`/api/booking/${id}`, data);
             dispatch(propertyDetailsAction(id));
             setResetDatePicker(true);
         } catch (error) {
@@ -329,7 +331,6 @@ const AddComment = props => {
     const showComment = () => {
         setCommentInput(!showCommnetInput);
     };
-    const randomUser = staticUserData[Math.floor(Math.random() * 3)];
 
     const submitForm = async (e, formData) => {
         e.preventDefault();
