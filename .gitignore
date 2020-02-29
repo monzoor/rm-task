@@ -112,4 +112,4 @@ yarn.lock
 /api/package-lock.json
 .vscode
 /api/client
-# /api/public/uploads
+/api/public/uploads
