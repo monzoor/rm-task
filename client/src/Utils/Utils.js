@@ -43,13 +43,12 @@ const qstringCreator = (query, offset = 0) => {
     let isoStartDate = null;
     let isoEndDate = null;
     if (queryStringDatas.startDate && queryStringDatas.endDate) {
-        isoStartDate = new Date(
-            moment(queryStringDatas.startDate).format('YYYY-DD-MM')
-        ).toISOString();
-
-        isoEndDate = new Date(
-            moment(queryStringDatas.endDate).format('YYYY-DD-MM')
-        ).toISOString();
+        isoStartDate = moment(new Date(queryStringDatas.startDate))
+            .utc()
+            .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+        isoEndDate = moment(new Date(queryStringDatas.endDate))
+            .utc()
+            .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
     }
 
     if (Object.keys(queryStringDatas).length) {

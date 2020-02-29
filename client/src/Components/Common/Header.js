@@ -158,6 +158,7 @@ const SecendaryStaticNav = () => {
 };
 const Search = props => {
     const queryStringDatas = queryString.parse(props.location.search);
+
     const [formDatas, setFormDatas] = useState({
         location: Object.keys(queryStringDatas)
             ? queryStringDatas.location
@@ -177,6 +178,7 @@ const Search = props => {
                 : ''
             : '',
     });
+
     const handleChange = e => {
         setFormDatas({
             ...formDatas,
@@ -191,10 +193,10 @@ const Search = props => {
             ? `location=${formData.location}`
             : '';
         const startDateString = dateRanges.startDate
-            ? `startDate=${moment(dateRanges.startDate).format('DD-MM-YYYY')}`
+            ? `startDate=${moment(dateRanges.startDate).format('MM-DD-YYYY')}`
             : '';
         const endDateString = dateRanges.endDate
-            ? `endDate=${moment(dateRanges.endDate).format('DD-MM-YYYY')}`
+            ? `endDate=${moment(dateRanges.endDate).format('MM-DD-YYYY')}`
             : '';
         const searchString = `${
             locationSearchString ? locationSearchString : ''
@@ -251,7 +253,11 @@ const Search = props => {
                         </Col>
                         <Col className="px-0 border">
                             <FormGroup className="location main-datepicker">
-                                <Date dateRange={dateRange} />
+                                <Date
+                                    dateRange={dateRange}
+                                    search
+                                    dateRangeValuesFromSearchString={dateRanges}
+                                />
                             </FormGroup>
                         </Col>
                         <Col className="px-0 border person">

@@ -7,25 +7,39 @@ import moment from 'moment';
 import 'react-dates/lib/css/_datepicker.css';
 
 const enumerateDaysBetweenDates = (startDate, endDate) => {
-    var now = startDate.clone(),
-        dates = [];
+    const now = startDate.clone();
+    const dates = [];
 
     while (now.isSameOrBefore(endDate)) {
-        dates.push(now.format('M/D/YYYY'));
+        dates.push(now.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'));
         now.add(1, 'days');
     }
     return dates;
 };
-const DatePicker = ({ dateRange, reserve, booking }) => {
+const DatePicker = ({
+    dateRange,
+    reserve,
+    booking,
+    search,
+    dateRangeValuesFromSearchString,
+}) => {
     const detePickerItems = {
-        dateFormat: 'DD/MM/YYYY',
+        dateFormat: 'MM-DD-YYYY',
         small: false,
         block: false,
         orientation: 'horizontal',
         numMonths: reserve ? 1 : 2,
     };
-    const [startDateItems, setStartDateItems] = useState(null);
-    const [endDateItems, setEndDateItems] = useState(null);
+    const [startDateItems, setStartDateItems] = useState(
+        search && dateRangeValuesFromSearchString.startDate
+            ? moment(new Date(dateRangeValuesFromSearchString.startDate))
+            : null
+    );
+    const [endDateItems, setEndDateItems] = useState(
+        search && dateRangeValuesFromSearchString.endDate
+            ? moment(new Date(dateRangeValuesFromSearchString.endDate))
+            : null
+    );
     const [focusInputItems, setFocusInputItems] = useState(null);
 
     const BLOCKED_DATES = [];
@@ -34,8 +48,8 @@ const DatePicker = ({ dateRange, reserve, booking }) => {
         booking.map(dates => {
             BLOCKED_DATES.push(
                 ...enumerateDaysBetweenDates(
-                    moment(new Date(dates.startDate)),
-                    moment(new Date(dates.endDate))
+                    moment(dates.startDate),
+                    moment(dates.endDate)
                 )
             );
             return 1;
@@ -68,8 +82,8 @@ const DatePicker = ({ dateRange, reserve, booking }) => {
     return (
         <div>
             <DateRangePicker
-                startDateId="startDate"
-                endDateId="endDate"
+                startDateId={reserve ? 'startDateReserve' : 'startDateSearch'}
+                endDateId={reserve ? 'endDateReserve' : 'endDateSearch'}
                 startDate={startDateItems}
                 endDate={endDateItems}
                 onDatesChange={handleDatesChange}

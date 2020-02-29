@@ -167,6 +167,7 @@ const PropertiesList = props => {
     useEffect(() => {
         if (!loading) {
             setLoadingItem(false);
+            setNotFound(false);
         }
     }, [loading]);
 
