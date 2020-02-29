@@ -1,5 +1,25 @@
 # rm-task
 
+### Start project
+
+How to run the project for production
+
+Requirment: Docker
+
+```
+docker-compose up -d --build
+```
+
+the project will run on `http://localhost:8080`
+
+To run react development go to `./client` folder and run
+
+```
+yarn start
+```
+
+**Note:** `Stop` docker before starting and restart it after react dev started.
+
 ---
 
 ### Task List
@@ -81,23 +101,3 @@
     1. Create docker container :heavy_check_mark:
     2. Create Database with mongodb :heavy_check_mark:
     3. Used CRUD application :heavy_check_mark:
-
-### Start project
-
-How to run the project for production
-
-Requirment: Docker
-
-```
-docker-compose up -d --build
-```
-
-the project will run on `http://localhost:8080`
-
-To run react development go to `./client` folder and run
-
-```
-yarn start
-```
-
-**Note:** `Stop` docker before starting and restart it after react dev started.
