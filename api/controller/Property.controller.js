@@ -48,7 +48,6 @@ exports.search = async (req, res, next) => {
             },
             options
         );
-        // console.log('----', allpropertiesData);
 
         const dataPrep = {
             data: allpropertiesData.docs,
@@ -108,7 +107,6 @@ exports.allProperties = async (req, res, next) => {
         }
         res.json(dataPrep);
     } catch (e) {
-        console.error('========', e);
         next(e);
     }
 };
@@ -187,7 +185,6 @@ exports.comments = async (req, res, next) => {
     }
 };
 exports.createProperties = async (req, res, next) => {
-    console.log('-asdasd--', req.body);
     if (!req.body) {
         throw new ErrorHandler(400, 'Please fill all required field');
     }
@@ -266,7 +263,6 @@ exports.imageUpload = (req, res, next) => {
                 // name: data.originalname,
                 url: `/img/${data.filename}`,
             }));
-            console.log('---', uploadedData);
             res.status(status).json(uploadedData);
         }
     });
