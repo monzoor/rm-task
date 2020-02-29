@@ -24,7 +24,7 @@ exports.search = async (req, res, next) => {
             page: req.query.page || 1,
             limit: req.query.limit || 10,
         };
-
+        const { startDate, endDate } = req.query;
         allpropertiesData = await PropertyModel.paginate(
             {
                 $or: [
@@ -40,10 +40,10 @@ exports.search = async (req, res, next) => {
                     $not: {
                         $elemMatch: {
                             startDate: {
-                                $gt: req.query.startDate,
+                                $gt: startDate,
                             },
                             endDate: {
-                                $lt: req.query.endDate,
+                                $lt: endDate,
                             },
                         },
                     },
