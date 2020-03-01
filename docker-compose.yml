@@ -1,25 +1,34 @@
 version: '3'
 
 services:
-  nodemongodocker:
-    image: nodemongodocker
-    build: .
-    restart: always
-    volumes:
-      - ./api:/usr/src/app
-      - ./client:/usr/src/app/client
-      - /usr/app/node_modules
-    environment:
-      NODE_ENV: production
-    ports:
-      - 8080:8080
-    command: npm run dev
-    links:
-      - mongo
-  mongo:
-    container_name: mongo
-    image: mongo
-    volumes:
-      - ./data:/data/db/docker-node-mongo
-    ports:
-      - "27017:27017"
+    nodemongodocker:
+        image: nodemongodocker
+        build: .
+        restart: always
+        volumes:
+            - ./api:/usr/src/app
+            - ./client:/usr/src/app/client
+            - /usr/app/node_modules
+        environment:
+            NODE_ENV: production
+        ports:
+            - 8080:8080
+        networks:
+            - mern
+        command: npm run dev
+        depends_on:
+            - mongo
+        # links:
+        #     - mongo
+    mongo:
+        container_name: mongo
+        image: mongo
+        volumes:
+            - ./data/db:/data/db
+        ports:
+            - '27017:27017'
+        networks:
+            - mern
+networks:
+    mern:
+        driver: bridge

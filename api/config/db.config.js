@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const User = './User.model';
-const connection = 'mongodb://mongo:27017/expressmongo';
+const connection = 'mongodb://mongo:27017/rmtask';
 
 const connectDb = () => {
     return mongoose.connect(connection, {
