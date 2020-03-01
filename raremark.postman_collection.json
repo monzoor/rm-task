@@ -1,0 +1,184 @@
+{
+	"variables": [],
+	"info": {
+		"name": "raremark",
+		"_postman_id": "3111958b-69c3-0f03-ccd3-09493ff06913",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get priority",
+			"request": {
+				"url": "{{url}}/api/allProperties/priority",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get all",
+			"request": {
+				"url": "{{url}}/api/allProperties/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "search",
+			"request": {
+				"url": {
+					"raw": "{{url}}/api/search?startDate=03-08-201&endDate=03-31-2021",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"search"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "03-08-201",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "endDate",
+							"value": "03-31-2021",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "details",
+			"request": {
+				"url": "{{url}}/api/details/{{id}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "create",
+			"request": {
+				"url": "{{url}}/api/createProperty",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"Private Room- 1Double & 1Single Bed-Central London\",\n\t\"description\": \"A Private Room in Shared flat with a friendly professional female and her two lovable pugs(dogs).I look forward to hosting you in my home and welcoming you to London\",\n\t\"price\": \"£200\",\n\t\"type\": \"Private room in flat\",\n\t\"country\": \"uk\",\n\t\"city\": \"london\",\n\t\"creator\": {\n\t\t\"name\": \"Monzoor\",\n\t\t\"avatar\": \"https://cdn.iconscout.com/icon/premium/png-256-thumb/female-avatar-12-774634.png\"\n\t},\n\t\"images\": [\n        { \"url\": \"/img/1582992717755_.jpg\" },\n        { \"url\": \"/img/1582992717769_.jpg\" },\n        { \"url\": \"/img/1582992717775_.jpg\" }\n    ]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "booking",
+			"request": {
+				"url": "{{url}}/api/booking/{{id}}",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"booking\": {\n\t\t\"user\": {\n\t        \"id\": 1,\n\t        \"name\": \"Monzoor\",\n\t        \"avatar\":\n\t            \"https://avataaars.io/?avatarStyle=Transparent&topType=Eyepatch&facialHairType=Blank&clotheType=ShirtCrewNeck&clotheColor=Gray01&graphicType=Skull&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light\",\n\t        \"location\": {\n\t            \"country\": \"UK\",\n\t            \"city\": \"london\"\n\t        }\n    \t},\n\t\t\"startDate\": \"2020-03-03T06:00:00.000+00:00\",\n\t\t\"endDate\": \"2020-03-06T06:00:00.000+00:00\"\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "comment",
+			"request": {
+				"url": "{{url}}/api/comments/{{id}}",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"user\": {\n        \"id\": 1,\n        \"name\": \"Monzoor\",\n        \"avatar\":\n            \"https://avataaars.io/?avatarStyle=Transparent&topType=Eyepatch&facialHairType=Blank&clotheType=ShirtCrewNeck&clotheColor=Gray01&graphicType=Skull&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light\",\n        \"location\": {\n            \"country\": \"UK\",\n            \"city\": \"london\"\n        }\n\t},\n\t\"rating\": 5,\n\t\"comments\": \"asdasd asd a sd a ds a sd\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "image",
+			"request": {
+				"url": "{{url}}/img/upload",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "d",
+							"description": "",
+							"type": "file",
+							"src": "49853237_10216642183980734_998933810215124992_o.jpg",
+							"disabled": true
+						},
+						{
+							"key": "productImage",
+							"description": "",
+							"type": "file",
+							"src": "front-end-developer--monzoor.jpg"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "delete all",
+			"request": {
+				"url": "{{url}}/api/deleteAll",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
