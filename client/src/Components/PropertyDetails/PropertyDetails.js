@@ -335,6 +335,7 @@ const AddComment = props => {
         const data = {
             user: randomUser,
             comments: formData.comments,
+            rating: formData.rating
         };
 
         const response = await post(`/api/comments/${id}`, data);
@@ -426,7 +427,7 @@ const UserComments = ({ comments }) => {
                                 <Media>
                                     <Media left className="mr-4">
                                         <img
-                                            src={comment.avatar}
+                                            src={comment.user.avatar}
                                             className="rounded-circle"
                                             alt=""
                                             width="50px"
@@ -439,13 +440,13 @@ const UserComments = ({ comments }) => {
                                                 {comment.comments}
                                             </p>
                                             <footer className="blockquote-footer">
-                                                {comment.userName}{' '}
+                                                {comment.user.name}{' '}
                                                 <cite
                                                     className="small"
                                                     title="Source Title"
                                                 >
-                                                    {comment.location.country}{' '}
-                                                    {comment.location.city}
+                                                    {comment.user.location.country}{' '}
+                                                    {comment.user.location.city}
                                                 </cite>
                                                 <p>
                                                     {RatingCreator({
@@ -464,7 +465,7 @@ const UserComments = ({ comments }) => {
                 </>
             ) : (
                 <Col xs="12">
-                    <p>No comments availabe</p>
+                    <p>No comments available</p>
                 </Col>
             )}
         </Row>
