@@ -14,7 +14,7 @@ const { handleError } = require('./utils/errorHandle');
 
 const app = express();
 
-app.use(express.static(path.resolve(__dirname, '../client/build')));
+app.use(express.static(path.resolve(__dirname, `${process.env.DATABASE_HOST ? './' : '../'}client/build`)));
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '20mb' }));
 app.use(compression());
@@ -26,7 +26,7 @@ app.use((err, req, res, next) => {
 
 // All remaining requests return the React app, so it can handle routing.
 app.get('*', function(request, response) {
-    response.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+    response.sendFile(path.resolve(__dirname, `${process.env.DATABASE_HOST ? './' : '../'}client/build`, 'index.html'));
 });
 
 app.listen(PORT, function() {

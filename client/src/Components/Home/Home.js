@@ -47,6 +47,7 @@ const Comments = ({ comments }) => {
             return o.rating;
         })
     );
+
     const maxRatingComments = comments.filter(item => {
         return item.rating === maxRatingValue;
     });
@@ -71,16 +72,16 @@ const Comments = ({ comments }) => {
             </p>
             <Media>
                 <img
-                    src={maxRatingComments[0].avatar}
+                    src={maxRatingComments[0].user.avatar}
                     className="rounded-circle"
                     alt=""
                     width="50px"
                     height="50px"
                 />
                 <Media body className="ml-2 text-muted">
-                    <p className="mb-0">{maxRatingComments[0].userName}</p>
+                    <p className="mb-0">{maxRatingComments[0].user.name}</p>
                     <p className="small">
-                        {maxRatingComments[0].location.country}
+                        {maxRatingComments[0].user.location.country}
                     </p>
                 </Media>
             </Media>
